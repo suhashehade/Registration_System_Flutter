@@ -126,6 +126,10 @@ class _ArchiveState extends State<Archive> {
                                               id: users[index]['id'],
                                               name: users[index]['name'],
                                               title: users[index]['title'],
+                                              dateOfBirth: users[index]
+                                                  ['date_of_birth'],
+                                              nationalNumber: users[index]
+                                                  ['national_number'],
                                             )));
                               },
                               icon: const Icon(

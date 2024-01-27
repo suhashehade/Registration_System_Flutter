@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:registration_app/pages/archive.dart';
 import 'package:registration_app/pages/sign_up.dart';
+import 'package:registration_app/pages/updateUser.dart';
 import 'pages/login.dart';
 
 void main() {
@@ -18,7 +19,14 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Login(),
         '/signUp': (context) => const SignUp(),
-        '/archive': (context) => const Archive()
+        '/archive': (context) => const Archive(),
+        '/updateUser': (context) => const UpdateUser(
+              id: 0,
+              name: '',
+              title: '',
+              dateOfBirth: '',
+              nationalNumber: '',
+            )
       },
     );
   }

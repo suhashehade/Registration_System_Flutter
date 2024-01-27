@@ -96,15 +96,18 @@ class _LoginState extends State<Login> {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            List<Map> res =
-                                await db.login('''SELECT * FROM users WHERE 
+                            if (_formKey.currentState!.validate()) {
+                              List<Map> res =
+                                  await db.login('''SELECT * FROM users WHERE 
                                 name='${name.text}' 
                                 AND national_number='${nationalNumber.text}' ''');
-                            if (res.isEmpty) {
-                              print(res);
-                            } else {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const Archive()));
+                              if (res.isEmpty) {
+                                print(res);
+                              } else {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => const Archive()));
+                              }
                             }
                           },
                           child: const Text(
