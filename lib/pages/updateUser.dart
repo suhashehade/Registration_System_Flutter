@@ -116,7 +116,7 @@ class _UpdateUserState extends State<UpdateUser> {
                         "name": nameController.text,
                         "title": titleController.text,
                         "date_of_birth": dateOfBirthController.text,
-                        "national_number": nameController.text
+                        "national_number": nationalNumberController.text
                       };
                       await db.update('users', user, "id=${widget.id}");
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
