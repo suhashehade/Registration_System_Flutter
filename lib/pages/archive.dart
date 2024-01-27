@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/pages/login.dart';
 import 'package:registration_app/pages/updateUser.dart';
 import 'package:registration_app/services/db.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Archive extends StatefulWidget {
   const Archive({super.key});
@@ -39,6 +41,18 @@ class _ArchiveState extends State<Archive> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('name');
+              prefs.remove('nNumber');
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const Login()));
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
         title: const Text('Archive'),
       ),
       body: Center(

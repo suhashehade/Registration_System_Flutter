@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:registration_app/pages/archive.dart';
 import 'package:registration_app/pages/sign_up.dart';
 import 'package:registration_app/services/db.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -128,7 +129,11 @@ class _LoginState extends State<Login> {
                         children: [
                           Checkbox(
                             value: isChecked,
-                            onChanged: (bool? value) {
+                            onChanged: (bool? value) async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString('name', name.text);
+                              prefs.setString('nNumber', nationalNumber.text);
                               setState(() {
                                 isChecked = value!;
                               });

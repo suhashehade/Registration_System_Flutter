@@ -95,6 +95,9 @@ class _UpdateUserState extends State<UpdateUser> {
                 ),
               ),
               TextFormField(
+                onChanged: (value) {
+                  FocusScope.of(context).unfocus();
+                },
                 controller: nationalNumberController,
                 decoration: const InputDecoration(
                   label: Text(

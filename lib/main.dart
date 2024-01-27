@@ -2,32 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:registration_app/pages/archive.dart';
 import 'package:registration_app/pages/sign_up.dart';
 import 'package:registration_app/pages/updateUser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/login.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const Login(),
-        '/signUp': (context) => const SignUp(),
-        '/archive': (context) => const Archive(),
-        '/updateUser': (context) => const UpdateUser(
-              id: 0,
-              name: '',
-              title: '',
-              dateOfBirth: '',
-              nationalNumber: '',
-            )
-      },
-    );
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MaterialApp(
+    home: prefs.getString('name') == null && prefs.getString('nNumber') == null
+        ? const Login()
+        : const Archive(),
+  ));
 }
