@@ -1,58 +1,24 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:registration_app/pages/login.dart';
-import 'package:registration_app/pages/updateUser.dart';
-import 'package:registration_app/services/db.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'package:registration_app/controllers/userController.dart';
+import 'package:registration_app/pages/sideBar.dart';
 
-class Archive extends StatefulWidget {
-  const Archive({super.key});
-
-  @override
-  State<Archive> createState() => _ArchiveState();
-}
-
-class _ArchiveState extends State<Archive> {
-  DB db = DB();
-  List users = [];
+// ignore: must_be_immutable
+class Archive extends GetView<UserController> {
   TextEditingController keyWordConroller = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    getUsers('users');
-  }
 
-  getUsers(String table) async {
-    List<Map> response = await db.read(table);
-    if (keyWordConroller.text == '') {
-      users.addAll(response);
-      setState(() {});
-    }
-  }
-
-  filter(String value) {
-    setState(() {
-      Iterable filterdUsers = users.where(
-          (element) => element['name'] == value || element['title'] == value);
-      users.replaceRange(0, users.length, filterdUsers.toList());
-    });
-  }
+  Archive({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(UserController());
+
     return Scaffold(
+      drawer: const Drawer(
+        child: SideBar(),
+      ),
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.remove('name');
-              prefs.remove('nNumber');
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const Login()));
-            },
-            icon: const Icon(Icons.logout),
-          )
-        ],
         title: const Text('Archive'),
       ),
       body: Center(
@@ -72,20 +38,16 @@ class _ArchiveState extends State<Archive> {
                           hintText: 'Search by title | name',
                         ),
                         onChanged: (value) async {
+                          await controller.filter(keyWordConroller.text);
                           if (value == '') {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const Archive()));
+                            controller.users.clear();
+                            controller.getUsers('users');
                           }
                         },
+                        onSubmitted: (value) async {
+                          await controller.filter(keyWordConroller.text);
+                        },
                       ),
-                    ),
-                    TextButton(
-                      child: const Text('search'),
-                      onPressed: () async {
-                        FocusScope.of(context).unfocus();
-                        await filter(keyWordConroller.text);
-                      },
                     ),
                   ],
                 )),
@@ -94,72 +56,81 @@ class _ArchiveState extends State<Archive> {
             const SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Card(
-                      child: ListTile(
-                        title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("Name: ${users[index]['name']}"),
-                              Text(
-                                  "National NO.: ${users[index]['national_number']}"),
-                              Text("Title: ${users[index]['title']}"),
-                            ]),
-                        subtitle: Text(
-                            "Birth of date: ${users[index]['date_of_birth']}"),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              onPressed: () async {
-                                int response = await db.delete(
-                                    'users', 'id=${users[index]['id']}');
-                                if (response > 0) {
-                                  users.removeWhere((element) =>
-                                      element!['id'] == users[index]['id']);
-                                }
-                                if (mounted) {
-                                  setState(() {});
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              ),
+            GetX<UserController>(builder: (UserController controller) {
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: controller.users.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Card(
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(10.0),
+                            title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100.0)),
+                                    ),
+                                    height: 80.0,
+                                    width: 80.0,
+                                    child: Image.file(
+                                      File(
+                                        "${controller.users[index]['photo']}",
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Text(
+                                      "Name: ${controller.users[index]['name']}"),
+                                  Text(
+                                      "National NO.: ${controller.users[index]['national_number']}"),
+                                  Text(
+                                      "Title: ${controller.users[index]['title']}"),
+                                ]),
+                            subtitle: Text(
+                                "Date of birth: ${controller.users[index]['date_of_birth']}"),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  onPressed: () async {
+                                    await controller
+                                        .delete(controller.users[index]['id']);
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    Get.offNamed('/updateUser', arguments: {
+                                      "id": controller.users[index]['id'],
+                                      "name": controller.users[index]['name'],
+                                      "title": controller.users[index]['title'],
+                                      "dateOfBirth": controller.users[index]
+                                          ['date_of_birth'],
+                                      "nationalNumber": controller.users[index]
+                                          ['national_number'],
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.green,
+                                  ),
+                                )
+                              ],
                             ),
-                            IconButton(
-                              onPressed: () async {
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                        builder: (context) => UpdateUser(
-                                              id: users[index]['id'],
-                                              name: users[index]['name'],
-                                              title: users[index]['title'],
-                                              dateOfBirth: users[index]
-                                                  ['date_of_birth'],
-                                              nationalNumber: users[index]
-                                                  ['national_number'],
-                                            )));
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.green,
-                              ),
-                            )
-                          ],
-                        ),
-                        isThreeLine: true,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+                            isThreeLine: true,
+                          ),
+                        ));
+                  },
+                ),
+              );
+            })
           ],
         ),
       ),

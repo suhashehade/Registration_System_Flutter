@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -19,7 +18,7 @@ class DB {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath, 'registration_db');
     Database mydb = await openDatabase(path,
-        onCreate: _onCreate, version: 1, onUpgrade: _onUpgrade);
+        onCreate: _onCreate, version: 15, onUpgrade: _onUpgrade);
     return mydb;
   }
 
@@ -29,7 +28,8 @@ class DB {
                 "name" TEXT NOT NULL,
                 "national_number" TEXT NOT NULL UNIQUE,
                 "date_of_birth" DATE,
-                "title" TEXT
+                "title" TEXT, 
+                "photo" TEXT
                )
                 
     ''');
@@ -50,15 +50,33 @@ class DB {
     return response;
   }
 
-  insert(String table, Map<String, String> user) async {
+  getOne(String sql) async {
+    Database? mydb = await db;
+    List response = await mydb!.rawQuery(sql);
+    return response;
+  }
+
+  insert(String table, Map<String, dynamic> user) async {
     Database? mydb = await db;
     int response = await mydb!.insert(table, user);
+    return response;
+  }
+
+  readJoin(String sql) async {
+    Database? mydb = await db;
+    List response = await mydb!.rawQuery(sql);
     return response;
   }
 
   update(String table, Map<String, String> user, String where) async {
     Database? mydb = await db;
     int response = await mydb!.update(table, user, where: where);
+    return response;
+  }
+
+  updateOrderState(String sql) async {
+    Database? mydb = await db;
+    int response = await mydb!.rawUpdate(sql);
     return response;
   }
 
@@ -80,5 +98,36 @@ class DB {
     return response;
   }
 
-  FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) {}
+  FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Batch batch = db.batch();
+//     await db.execute('''
+//      CREATE TABLE 'currencies' (
+//         "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+//         "name" TEXT NOT NULL,
+//         "symbol" TEXT,
+//         "rate" REAL
+//      )
+// ''');
+    await db.execute('''
+     CREATE TABLE 'orders' (
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        "currencyId" INTEGER NOT NULL,
+        "userId" INTEGER NOT NULL,
+        "orderDate" DATE NOT NULL,
+        "orderAmmount" INTEGER,
+        "equalOrderAmmount" REAL,
+        "status" INTEGER,
+        "type" TEXT,
+        FOREIGN KEY(currencyId) REFERENCES currencies(id),
+        FOREIGN KEY(userId) REFERENCES users(id)
+     )
+''');
+
+//     await db.execute('''
+//   DROP TABLE orders
+// ''');
+
+    // await batch.commit();
+    print("created the new table order");
+  }
 }

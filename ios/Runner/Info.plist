@@ -4,6 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to the camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Allow access to photo library</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow access to the microphone</string>
 	<key>CFBundleDisplayName</key>
 	<string>Registration App</string>
 	<key>CFBundleExecutable</key>

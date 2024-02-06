@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/userController.dart';
+import 'package:registration_app/controllers/currenciesController.dart';
 
 // ignore: must_be_immutable
-class UpdateUser extends GetView<UserController> {
+class UpdateCurrency extends GetView<CurrenciesController> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController dateOfBirthController = TextEditingController();
-  TextEditingController nationalNumberController = TextEditingController();
+  TextEditingController rateController = TextEditingController();
+  TextEditingController symbolController = TextEditingController();
 
-  UpdateUser({super.key});
+  UpdateCurrency({super.key});
 
   @override
   Widget build(BuildContext context) {
     nameController.text = Get.arguments['name'];
-    titleController.text = Get.arguments['title'];
-    dateOfBirthController.text = Get.arguments['dateOfBirth'];
-    nationalNumberController.text = Get.arguments['nationalNumber'];
-    Get.put(UserController());
+    rateController.text = Get.arguments['rate'].toString();
+    symbolController.text = Get.arguments['symbol'];
+
+    Get.put(CurrenciesController());
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -27,11 +26,11 @@ class UpdateUser extends GetView<UserController> {
               color: Colors.black,
             ),
             onPressed: () {
-              Get.offNamed('/archive');
+              Get.offNamed('/currencies');
             },
           ),
         ],
-        title: const Text('UPDATE USER'),
+        title: const Text('UPDATE CURRENCY'),
         centerTitle: true,
       ),
       backgroundColor: Colors.grey[400],
@@ -47,37 +46,25 @@ class UpdateUser extends GetView<UserController> {
                 controller: nameController,
                 decoration: const InputDecoration(
                   label: Text(
-                    'Username',
+                    'Name',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),
               ),
               TextFormField(
-                controller: titleController,
+                controller: rateController,
                 decoration: const InputDecoration(
                   label: Text(
-                    'Title',
+                    'Rate',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),
               ),
               TextFormField(
-                controller: dateOfBirthController,
+                controller: symbolController,
                 decoration: const InputDecoration(
                   label: Text(
-                    'date of birth',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ),
-              ),
-              TextFormField(
-                onChanged: (value) {
-                  FocusScope.of(context).unfocus();
-                },
-                controller: nationalNumberController,
-                decoration: const InputDecoration(
-                  label: Text(
-                    'national number',
+                    'Symbol',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),
@@ -91,16 +78,15 @@ class UpdateUser extends GetView<UserController> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      Map<String, String> user = {
+                      Map<String, String> currency = {
                         "name": nameController.text,
-                        "title": titleController.text,
-                        "date_of_birth": dateOfBirthController.text,
-                        "national_number": nationalNumberController.text
+                        "rate": rateController.text,
+                        "symbol": symbolController.text,
                       };
-                      await controller.updateUser(
-                          'users', user, Get.arguments['id']);
+                      await controller.updateCurrency(
+                          'currencies', currency, Get.arguments['id']);
 
-                      Get.offNamed('/archive');
+                      Get.offNamed('/currencies');
                     },
                     child: const Text('UPDATE'),
                   ),

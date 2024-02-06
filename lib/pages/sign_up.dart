@@ -1,27 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:registration_app/pages/archive.dart';
-import 'package:registration_app/pages/login.dart';
-import 'package:registration_app/services/db.dart';
+import 'package:get/get.dart';
+import 'package:registration_app/controllers/authController.dart';
 import 'package:intl/intl.dart';
+import 'package:registration_app/controllers/fileUploadController.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
-
-  @override
-  State<SignUp> createState() => _SignUpState();
-}
-
-class _SignUpState extends State<SignUp> {
-  DB db = DB();
-
+// ignore: must_be_immutable
+class SignUp extends GetView<AuthController> {
+  SignUp({super.key});
   final _formKey = GlobalKey<FormState>();
-
-  signUp(String table, Map<String, String> user) async {
-    int response = await db.insert(table, user);
-    if (response > 0) {
-      print(user);
-    }
-  }
 
   TextEditingController nameController = TextEditingController();
   TextEditingController nationalNumberController = TextEditingController();
@@ -30,6 +17,8 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AuthController());
+    FileUploadController fileUploadController = Get.put(FileUploadController());
     return Scaffold(
       backgroundColor: Colors.grey[400],
       body: Padding(
@@ -38,7 +27,6 @@ class _SignUpState extends State<SignUp> {
             key: _formKey,
             child: SingleChildScrollView(
               child: Column(
-                // mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Text(
@@ -46,6 +34,29 @@ class _SignUpState extends State<SignUp> {
                     style: TextStyle(
                       fontSize: 30.0,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  GetX<FileUploadController>(
+                      builder: (FileUploadController controller) {
+                    return controller.imagePath!.value == ''
+                        ? const Text('no picked image')
+                        : GetX<FileUploadController>(
+                            builder: (FileUploadController controller) {
+                            return SizedBox(
+                              height: 50.0,
+                              width: 50.0,
+                              child:
+                                  Image.file(File(controller.imagePath!.value)),
+                            );
+                          });
+                  }),
+                  MaterialButton(
+                    onPressed: () {
+                      fileUploadController.uplaodImage();
+                    },
+                    child: const Text('upload image'),
                   ),
                   const SizedBox(
                     height: 30.0,
@@ -103,9 +114,7 @@ class _SignUpState extends State<SignUp> {
                       if (pickedDate != null) {
                         String formattedDate =
                             DateFormat.yMMMd().format(pickedDate);
-                        setState(() {
-                          dateOfBirthController.text = formattedDate;
-                        });
+                        dateOfBirthController.text = formattedDate;
                       }
                     },
                   ),
@@ -138,12 +147,12 @@ class _SignUpState extends State<SignUp> {
                               "name": nameController.text,
                               "national_number": nationalNumberController.text,
                               "date_of_birth": dateOfBirthController.text,
-                              "title": titleController.text
+                              "title": titleController.text,
+                              "photo": fileUploadController.imagePath!.value
                             };
-                            await signUp('users', user);
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const Archive()));
+
+                            await controller.signUp('users', user);
+                            Get.offNamed('/archive');
                           }
                         },
                         child: const Text('SIGN UP'),
@@ -160,9 +169,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const Login()));
+                          Get.toNamed('/');
                         },
                         child: const Text(
                           "Sign In",

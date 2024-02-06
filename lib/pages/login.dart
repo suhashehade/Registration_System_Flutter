@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:registration_app/pages/archive.dart';
-import 'package:registration_app/pages/sign_up.dart';
+import 'package:get/get.dart';
+import 'package:registration_app/controllers/authController.dart';
+import 'package:registration_app/main.dart';
 import 'package:registration_app/services/db.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
-
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
-  bool isChecked = false;
+// ignore: must_be_immutable
+class Login extends GetView<AuthController> {
   DB db = DB();
   final _formKey = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
   TextEditingController nationalNumber = TextEditingController();
 
+  Login({super.key});
+
   @override
   Widget build(BuildContext context) {
+    Get.put(AuthController());
     return Scaffold(
       backgroundColor: Colors.grey[400],
       body: Form(
@@ -98,16 +94,10 @@ class _LoginState extends State<Login> {
                         ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              List<Map> res =
-                                  await db.login('''SELECT * FROM users WHERE 
-                                name='${name.text}' 
-                                AND national_number='${nationalNumber.text}' ''');
-                              if (res.isEmpty) {
-                                print(res);
-                              } else {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => const Archive()));
+                              List res = await controller.login(
+                                  name.text, nationalNumber.text);
+                              if (!res.isEmpty) {
+                                Get.offNamed('/archive');
                               }
                             }
                           },
@@ -127,18 +117,18 @@ class _LoginState extends State<Login> {
                     children: [
                       Row(
                         children: [
-                          Checkbox(
-                            value: isChecked,
-                            onChanged: (bool? value) async {
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString('name', name.text);
-                              prefs.setString('nNumber', nationalNumber.text);
-                              setState(() {
-                                isChecked = value!;
-                              });
-                            },
-                          ),
+                          GetX<AuthController>(
+                              builder: (AuthController controller) {
+                            return Checkbox(
+                              value: controller.isChecked.value,
+                              onChanged: (bool? value) {
+                                prefs!.setString('name', name.text);
+                                prefs!
+                                    .setString('nNumber', nationalNumber.text);
+                                controller.toggleCheck(value);
+                              },
+                            );
+                          }),
                           const Text('Remember me'),
                         ],
                       ),
@@ -152,8 +142,7 @@ class _LoginState extends State<Login> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const SignUp()));
+                          Get.offNamed('/signUp');
                         },
                         child: const Text(
                           "Sign Up",
