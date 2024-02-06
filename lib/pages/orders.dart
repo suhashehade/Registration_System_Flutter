@@ -139,9 +139,6 @@ class Orders extends GetView<OrderController> {
                                       if (response > 0) {
                                         controller.switchOrderState(
                                             index, value);
-                                        print(controller.states);
-                                        // print(
-                                        //     "${controller.orders[index]['amount']} : ${controller.states[index]}");
                                       }
                                     },
                                   );
