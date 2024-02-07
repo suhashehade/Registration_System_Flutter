@@ -125,21 +125,21 @@ class Orders extends GetView<OrderController> {
                                   icon: const Icon(Icons.delete),
                                 ),
                                 GetX<OrderController>(
-                                    builder: (OrderController controller) {
+                                    builder: (OrderController orderController) {
                                   return Switch(
-                                    value: controller.states[index] == 1
+                                    value: orderController.states[index] == 1
                                         ? true
                                         : false,
                                     onChanged: (bool value) async {
-                                      int response =
-                                          await controller.updateOrderState(
-                                              value ? 1 : 0,
-                                              controller.orders[index]
-                                                  ['orderId']);
-                                      if (response > 0) {
-                                        controller.switchOrderState(
-                                            index, value);
-                                      }
+                                      await orderController.updateOrderState(
+                                          value ? 1 : 0,
+                                          orderController.orders[index]
+                                              ['orderId']);
+
+                                      orderController.switchOrderState(
+                                          index, value);
+                                      orderController.orders.clear();
+                                      orderController.getOrders();
                                     },
                                   );
                                 }),

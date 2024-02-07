@@ -91,17 +91,17 @@ class OrderController extends GetxController {
   }
 
   getAllPaid() {
-    Iterable filterdStates = states.where((element) => element == 1);
-    states.replaceRange(0, states.length, filterdStates);
+    states.clear();
     Iterable filterdUsers = orders.where((element) => element['state'] == 1);
     orders.replaceRange(0, orders.length, filterdUsers.toList());
+    addStates();
   }
 
   getAllNotPaid() {
-    Iterable filterdStates = states.where((element) => element == 0);
-    states.replaceRange(0, states.length, filterdStates);
+    states.clear();
     Iterable filterdUsers = orders.where((element) => element['state'] == 0);
     orders.replaceRange(0, orders.length, filterdUsers.toList());
+    addStates();
   }
 
   filter(String value) {
