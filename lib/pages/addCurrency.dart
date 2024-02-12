@@ -15,16 +15,20 @@ class AddCurrency extends GetView<CurrenciesController> {
   Widget build(BuildContext context) {
     CurrenciesController currenciesController = Get.find();
     return Scaffold(
-      drawer: const Drawer(
-        child: SideBar(),
-      ),
       appBar: AppBar(
-        title: const Text('Add Currency'),
+        backgroundColor: const Color.fromARGB(255, 64, 99, 67),
+        title: const Text(
+          'Add Currency',
+          style: TextStyle(
+            color: Color.fromARGB(255, 243, 239, 204),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.black,
+              color: Color.fromARGB(255, 243, 239, 204),
             ),
             onPressed: () {
               Get.offNamed('/currencies');
@@ -32,6 +36,7 @@ class AddCurrency extends GetView<CurrenciesController> {
           ),
         ],
       ),
+      backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -89,7 +94,13 @@ class AddCurrency extends GetView<CurrenciesController> {
                     const SizedBox(
                       height: 30.0,
                     ),
-                    ElevatedButton(
+                    MaterialButton(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(80.0),
+                        ),
+                      ),
+                      color: const Color.fromARGB(255, 64, 99, 67),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           Map<String, String> currency = {
@@ -103,7 +114,12 @@ class AddCurrency extends GetView<CurrenciesController> {
                           Get.offNamed('/currencies');
                         }
                       },
-                      child: const Text('ADD CURRENCY'),
+                      child: const Text(
+                        'ADD CURRENCY',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 243, 239, 204),
+                        ),
+                      ),
                     ),
                   ],
                 ),

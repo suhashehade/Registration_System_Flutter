@@ -24,7 +24,9 @@ void main() async {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     getPages: [
-      GetPage(name: '/', page: () => Login(), middlewares: [AuthMiddleware()]),
+      GetPage(name: '/', page: () => Login(), middlewares: [
+        AuthMiddleware(),
+      ]),
       GetPage(name: '/archive', page: () => Archive()),
       GetPage(name: '/updateUser', page: () => UpdateUser()),
       GetPage(name: '/orders', page: () => Orders()),

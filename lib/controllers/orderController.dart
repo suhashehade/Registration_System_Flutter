@@ -86,8 +86,10 @@ class OrderController extends GetxController {
     }
   }
 
-  double findEqualAmmount(double amount, double value) {
-    return amount / value;
+  int findEqualAmmount(double amount, double value) {
+    double equalAmount = 0.0;
+    equalAmount = amount / value;
+    return equalAmount.round();
   }
 
   getAllPaid() {

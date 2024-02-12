@@ -29,16 +29,20 @@ class AddOrder extends GetView<OrderController> {
     ];
 
     return Scaffold(
-      drawer: const Drawer(
-        child: SideBar(),
-      ),
       appBar: AppBar(
-        title: const Text('Orders'),
+        backgroundColor: const Color.fromARGB(255, 64, 99, 67),
+        title: const Text(
+          'Orders',
+          style: TextStyle(
+            color: Color.fromARGB(255, 243, 239, 204),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.black,
+              color: Color.fromARGB(255, 243, 239, 204),
             ),
             onPressed: () {
               Get.offNamed('/orders');
@@ -46,12 +50,13 @@ class AddOrder extends GetView<OrderController> {
           ),
         ],
       ),
+      backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Form(
             key: _formKey,
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 TextFormField(
                   validator: (value) {
@@ -103,7 +108,7 @@ class AddOrder extends GetView<OrderController> {
                         onChanged: (value) {
                           if (dropDownController.selectedCurrency.value != 0) {
                             double amount = double.parse(amountController.text);
-                            double equalAmount = controller.findEqualAmmount(
+                            int equalAmount = controller.findEqualAmmount(
                                 amount, controller.rate.value);
                             equalAmountController.text = equalAmount.toString();
                           }
@@ -166,7 +171,7 @@ class AddOrder extends GetView<OrderController> {
                           dropDownController.updateSelectedCurrency(value);
                           if (amountController.text != '') {
                             double amount = double.parse(amountController.text);
-                            double equalAmount = controller.findEqualAmmount(
+                            int equalAmount = controller.findEqualAmmount(
                                 amount, controller.rate.value);
                             equalAmountController.text = equalAmount.toString();
                           }
@@ -267,7 +272,13 @@ class AddOrder extends GetView<OrderController> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                ElevatedButton(
+                MaterialButton(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(80.0),
+                    ),
+                  ),
+                  color: const Color.fromARGB(255, 64, 99, 67),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       Map<String, dynamic> order = {
@@ -284,7 +295,12 @@ class AddOrder extends GetView<OrderController> {
                       Get.offNamed('/orders');
                     }
                   },
-                  child: const Text('ADD ORDER'),
+                  child: const Text(
+                    'ADD ORDER',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 243, 239, 204),
+                    ),
+                  ),
                 ),
               ],
             ),

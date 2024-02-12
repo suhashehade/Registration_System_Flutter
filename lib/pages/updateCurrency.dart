@@ -19,21 +19,27 @@ class UpdateCurrency extends GetView<CurrenciesController> {
     Get.put(CurrenciesController());
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 64, 99, 67),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.black,
+              color: Color.fromARGB(255, 243, 239, 204),
             ),
             onPressed: () {
               Get.offNamed('/currencies');
             },
           ),
         ],
-        title: const Text('UPDATE CURRENCY'),
+        title: const Text(
+          'UPDATE CURRENCY',
+          style: TextStyle(
+            color: Color.fromARGB(255, 243, 239, 204),
+          ),
+        ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.grey[400],
+      backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(40.0),
         child: Form(
@@ -76,7 +82,13 @@ class UpdateCurrency extends GetView<CurrenciesController> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ElevatedButton(
+                  MaterialButton(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(80.0),
+                      ),
+                    ),
+                    color: const Color.fromARGB(255, 64, 99, 67),
                     onPressed: () async {
                       Map<String, String> currency = {
                         "name": nameController.text,
@@ -88,7 +100,12 @@ class UpdateCurrency extends GetView<CurrenciesController> {
 
                       Get.offNamed('/currencies');
                     },
-                    child: const Text('UPDATE'),
+                    child: const Text(
+                      'UPDATE',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 243, 239, 204),
+                      ),
+                    ),
                   ),
                 ],
               ),

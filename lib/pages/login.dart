@@ -17,7 +17,7 @@ class Login extends GetView<AuthController> {
   Widget build(BuildContext context) {
     Get.put(AuthController());
     return Scaffold(
-      backgroundColor: Colors.grey[400],
+      backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Form(
           key: _formKey,
           child: Padding(
@@ -113,26 +113,19 @@ class Login extends GetView<AuthController> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          GetX<AuthController>(
-                              builder: (AuthController controller) {
-                            return Checkbox(
-                              value: controller.isChecked.value,
-                              onChanged: (bool? value) {
-                                prefs!.setString('name', name.text);
-                                prefs!
-                                    .setString('nNumber', nationalNumber.text);
-                                controller.toggleCheck(value);
-                              },
-                            );
-                          }),
-                          const Text('Remember me'),
-                        ],
-                      ),
-                      const Text('Forgot password?'),
+                      GetX<AuthController>(
+                          builder: (AuthController controller) {
+                        return Checkbox(
+                          value: controller.isChecked.value,
+                          onChanged: (bool? value) {
+                            prefs!.setString('name', name.text);
+                            prefs!.setString('nNumber', nationalNumber.text);
+                            controller.toggleCheck(value);
+                          },
+                        );
+                      }),
+                      const Text('Remember me'),
                     ],
                   ),
                   Row(

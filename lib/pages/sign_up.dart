@@ -20,7 +20,7 @@ class SignUp extends GetView<AuthController> {
     Get.put(AuthController());
     FileUploadController fileUploadController = Get.put(FileUploadController());
     return Scaffold(
-      backgroundColor: Colors.grey[400],
+      backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(40.0),
         child: Form(
@@ -150,17 +150,23 @@ class SignUp extends GetView<AuthController> {
                               "title": titleController.text,
                               "photo": fileUploadController.imagePath!.value
                             };
-
+                             
                             await controller.signUp('users', user);
                             Get.offNamed('/archive');
                           }
                         },
-                        child: const Text('SIGN UP'),
+                        child: const Text(
+                          'SIGN UP',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 120.0,
+                    height: 80.0,
                   ),
                   Row(
                     children: <Widget>[
