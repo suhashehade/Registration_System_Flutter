@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/controllers/currenciesController.dart';
-import 'package:registration_app/pages/sideBar.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:registration_app/widgets/navigationRail.dart';
 
 // ignore: must_be_immutable

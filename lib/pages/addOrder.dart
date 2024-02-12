@@ -5,7 +5,6 @@ import 'package:registration_app/controllers/currenciesController.dart';
 import 'package:registration_app/controllers/dropDownController.dart';
 import 'package:registration_app/controllers/orderController.dart';
 import 'package:registration_app/controllers/userController.dart';
-import 'package:registration_app/pages/sideBar.dart';
 
 // ignore: must_be_immutable
 class AddOrder extends GetView<OrderController> {

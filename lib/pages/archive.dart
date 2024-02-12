@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/controllers/userController.dart';
-import 'package:registration_app/pages/sideBar.dart';
 import 'package:registration_app/widgets/navigationRail.dart';
 
 // ignore: must_be_immutable
