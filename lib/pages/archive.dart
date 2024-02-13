@@ -19,6 +19,7 @@ class Archive extends GetView<UserController> {
         title: const Text('Archive'),
         centerTitle: true,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 64, 99, 67),
         onPressed: () {

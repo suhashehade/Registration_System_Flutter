@@ -18,6 +18,7 @@ class Currencies extends GetView<CurrenciesController> {
         title: const Text('Currencies'),
         centerTitle: true,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 64, 99, 67),
         onPressed: () {

@@ -86,59 +86,6 @@ class AddOrder extends GetView<OrderController> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please fill the input';
-                          }
-                          return null;
-                        },
-                        controller: amountController,
-                        decoration: const InputDecoration(
-                          label: Text(
-                            'Order Amount',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          if (dropDownController.selectedCurrency.value != 0) {
-                            double amount = double.parse(amountController.text);
-                            int equalAmount = controller.findEqualAmmount(
-                                amount, controller.rate.value);
-                            equalAmountController.text = equalAmount.toString();
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please fill the input';
-                          }
-                          return null;
-                        },
-                        controller: equalAmountController,
-                        decoration: const InputDecoration(
-                          label: Text(
-                            'Equal Amount',
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
                 GetX<DropDownController>(
                   builder: (DropDownController dropDownController) {
                     return DropdownButtonFormField(
@@ -251,6 +198,59 @@ class AddOrder extends GetView<OrderController> {
                           ? null
                           : dropDownController.selectedType.value);
                 }),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please fill the input';
+                          }
+                          return null;
+                        },
+                        controller: amountController,
+                        decoration: const InputDecoration(
+                          label: Text(
+                            'Order Amount',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (dropDownController.selectedCurrency.value != 0) {
+                            double amount = double.parse(amountController.text);
+                            int equalAmount = controller.findEqualAmmount(
+                                amount, controller.rate.value);
+                            equalAmountController.text = equalAmount.toString();
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please fill the input';
+                          }
+                          return null;
+                        },
+                        controller: equalAmountController,
+                        decoration: const InputDecoration(
+                          label: Text(
+                            'Equal Amount',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 30.0,
                 ),
