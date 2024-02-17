@@ -150,7 +150,7 @@ class SignUp extends GetView<AuthController> {
                               "title": titleController.text,
                               "photo": fileUploadController.imagePath!.value
                             };
-                             
+
                             await controller.signUp('users', user);
                             Get.offNamed('/archive');
                           }
@@ -175,7 +175,7 @@ class SignUp extends GetView<AuthController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.toNamed('/');
+                          Get.offNamed('/');
                         },
                         child: const Text(
                           "Sign In",

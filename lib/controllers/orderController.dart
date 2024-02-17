@@ -45,13 +45,19 @@ class OrderController extends GetxController {
     List response = await db!.readJoin('''
     SELECT users.name AS username, currencies.name AS currencyName, 
     orders.orderDate, orders.status AS state, orders.orderAmmount AS amount,
-    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId
+    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId,
+    orders.userId, orders.currencyId
     FROM orders JOIN users 
     ON users.id=orders.userId JOIN currencies 
     ON currencies.id=orders.currencyId
 ''');
     orders.addAll(response);
     addStates();
+  }
+
+  updateOrder(String table, Map<String, dynamic> order, int id) async {
+   int res = await db!.update(table, order, "id=$id");
+   return res;
   }
 
   addStates() {

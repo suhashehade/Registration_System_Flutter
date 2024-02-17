@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/controllers/navigationRailController.dart';
 import 'package:registration_app/controllers/authController.dart';
+import 'package:registration_app/controllers/showPagesController.dart';
 
 class CustomNavigationRail extends GetView<NavigationRailController> {
   const CustomNavigationRail({super.key});
@@ -9,6 +10,7 @@ class CustomNavigationRail extends GetView<NavigationRailController> {
   @override
   Widget build(BuildContext context) {
     Get.put(NavigationRailController());
+    ShowPagesController showPagesController = Get.put(ShowPagesController());
     AuthController authController = Get.put(AuthController());
     return GetX<NavigationRailController>(
         builder: (NavigationRailController controller) {
@@ -31,13 +33,13 @@ class CustomNavigationRail extends GetView<NavigationRailController> {
           controller.changeIndex(index);
 
           if (controller.index.value == 0) {
-            Get.offNamed('/archive');
+            showPagesController.toggleCurrentPage('users');
           } else {
             if (controller.index.value == 1) {
-              Get.offNamed('/orders');
+              showPagesController.toggleCurrentPage('orders');
             } else {
               if (controller.index.value == 2) {
-                Get.offNamed('/currencies');
+                showPagesController.toggleCurrentPage('currencies');
               }
             }
           }

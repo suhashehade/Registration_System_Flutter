@@ -30,7 +30,7 @@ class AddCurrency extends GetView<CurrenciesController> {
               color: Color.fromARGB(255, 243, 239, 204),
             ),
             onPressed: () {
-              Get.offNamed('/currencies');
+              Get.offNamed('/archive');
             },
           ),
         ],
@@ -110,7 +110,7 @@ class AddCurrency extends GetView<CurrenciesController> {
 
                           await currenciesController.insert(
                               'currencies', currency);
-                          Get.offNamed('/currencies');
+                          Get.offNamed('/archive');
                         }
                       },
                       child: const Text(

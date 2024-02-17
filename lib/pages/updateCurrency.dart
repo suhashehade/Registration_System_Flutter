@@ -27,7 +27,7 @@ class UpdateCurrency extends GetView<CurrenciesController> {
               color: Color.fromARGB(255, 243, 239, 204),
             ),
             onPressed: () {
-              Get.offNamed('/currencies');
+              Get.offNamed('/archive');
             },
           ),
         ],
@@ -98,7 +98,7 @@ class UpdateCurrency extends GetView<CurrenciesController> {
                       await controller.updateCurrency(
                           'currencies', currency, Get.arguments['id']);
 
-                      Get.offNamed('/currencies');
+                      Get.offNamed('/archive');
                     },
                     child: const Text(
                       'UPDATE',

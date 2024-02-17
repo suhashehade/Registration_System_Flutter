@@ -33,6 +33,11 @@ class CurrenciesController extends GetxController {
     await db!.update(table, currency, "id=$id");
   }
 
+  getCurrency(int id) async {
+   var res = await db!.getOne('currencies',"id=$id");
+   return res[0];
+  }
+
   @override
   void onInit() {
     super.onInit();

@@ -59,7 +59,10 @@ class UpdateUser extends GetView<UserController> {
                     ? SizedBox(
                         height: 50.0,
                         width: 50.0,
-                        child: Image.file(File(Get.arguments['photo'])),
+                        child: Get.arguments['photo'] == ''
+                            ? const Icon(Icons.photo)
+                            : Image.file(File(controller.imagePath!.value =
+                                Get.arguments['photo'])),
                       )
                     : GetX<FileUploadController>(
                         builder: (FileUploadController controller) {
@@ -133,7 +136,7 @@ class UpdateUser extends GetView<UserController> {
                     ),
                     color: const Color.fromARGB(255, 64, 99, 67),
                     onPressed: () async {
-                      Map<String, String> user = {
+                      Map<String, dynamic> user = {
                         "name": nameController.text,
                         "title": titleController.text,
                         "date_of_birth": dateOfBirthController.text,

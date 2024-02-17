@@ -16,7 +16,12 @@ class UserController extends GetxController {
     }
   }
 
-  updateUser(String table, Map<String, String> user, int id) async {
+  getUser(int id) async {
+    List<Map> response = await db!.getOne('users', "id=$id");
+    return response[0];
+  }
+
+  updateUser(String table, Map<String, dynamic> user, int id) async {
     await db!.update(table, user, "id=$id");
   }
 
