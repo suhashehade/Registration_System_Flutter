@@ -73,9 +73,10 @@ class Orders extends GetView<OrderController> {
                             color: Color.fromARGB(255, 64, 99, 67),
                             size: 30.0,
                           ),
-                    onTap: () {
+                    onTap: () async {
+                      controller.changeSorted();
                       controller.invertSorting();
-                      controller.sorting();
+                      await controller.sorting();
                     },
                   );
                 }),
@@ -118,30 +119,41 @@ class Orders extends GetView<OrderController> {
                                   GetX<OrderController>(builder:
                                       (OrderController orderController) {
                                     return Switch(
-                                      activeColor:
-                                          const Color.fromARGB(255, 64, 99, 67),
-                                      inactiveThumbColor: const Color.fromARGB(
-                                          255, 173, 188, 159),
-                                      value: orderController.states[index] == 1
-                                          ? true
-                                          : false,
-                                      onChanged: (bool value) async {
-                                        await orderController.updateOrderState(
-                                            value ? 1 : 0,
-                                            orderController.orders[index]
-                                                ['orderId']);
+                                        activeColor: const Color.fromARGB(
+                                            255, 64, 99, 67),
+                                        inactiveThumbColor:
+                                            const Color.fromARGB(
+                                                255, 173, 188, 159),
+                                        value: controller.orders[index]
+                                                    ['state'] ==
+                                                1
+                                            ? true
+                                            : false,
+                                        onChanged: (bool value) async {
+                                          int state = value ? 1 : 0;
 
-                                        orderController.switchOrderState(
-                                            index, value);
-                                        orderController.orders.clear();
-                                        orderController.getOrders();
-                                      },
-                                    );
+                                          int res = await orderController
+                                              .updateOrderState(
+                                                  state,
+                                                  orderController.orders[index]
+                                                      ['orderId']);
+
+                                          if (res > 0) {
+                                            if (controller.isSorted.value) {
+                                              controller.orders.clear();
+                                              orderController.getOrders();
+                                              orderController.sorting();
+                                            } else {
+                                              controller.orders.clear();
+                                              orderController.getOrders();
+                                            }
+                                          }
+                                        });
                                   }),
                                   GetX<OrderController>(builder:
                                       (OrderController orderController) {
                                     return Text(
-                                        "${orderController.states[index] == 1 ? "Paid" : orderController.states[index] == 0 ? "Not Paid" : null}");
+                                        "${controller.orders[index]['state'] == 1 ? "Paid" : controller.orders[index]['state'] == 0 ? "Not Paid" : null}");
                                   }),
                                 ],
                               ),

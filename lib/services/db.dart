@@ -120,6 +120,12 @@ class DB {
     return response;
   }
 
+  sort(String sql) async {
+    Database? mydb = await db;
+    List<Map> response = await mydb!.rawQuery(sql);
+    return response;
+  }
+
   FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     await db.execute('''
      CREATE TABLE 'currencies' (

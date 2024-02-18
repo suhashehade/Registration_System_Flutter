@@ -11,9 +11,14 @@ class OrderController extends GetxController {
   RxString type = "".obs;
   RxString stateKeyword = "".obs;
   RxBool isDescSorted = false.obs;
+  RxBool isSorted = false.obs;
 
   toggleCheck(value) {
     isChecked.value = value!;
+  }
+
+  changeSorted() {
+    isSorted.value = true;
   }
 
   updateStateKeyWord(value) {
@@ -56,8 +61,8 @@ class OrderController extends GetxController {
   }
 
   updateOrder(String table, Map<String, dynamic> order, int id) async {
-   int res = await db!.update(table, order, "id=$id");
-   return res;
+    int res = await db!.update(table, order, "id=$id");
+    return res;
   }
 
   addStates() {
@@ -99,17 +104,17 @@ class OrderController extends GetxController {
   }
 
   getAllPaid() {
-    states.clear();
+    // states.clear();
     Iterable filterdUsers = orders.where((element) => element['state'] == 1);
     orders.replaceRange(0, orders.length, filterdUsers.toList());
-    addStates();
+    // addStates();
   }
 
   getAllNotPaid() {
-    states.clear();
+    // states.clear();
     Iterable filterdUsers = orders.where((element) => element['state'] == 0);
     orders.replaceRange(0, orders.length, filterdUsers.toList());
-    addStates();
+    // addStates();
   }
 
   filter(String value) {
@@ -119,15 +124,40 @@ class OrderController extends GetxController {
     orders.replaceRange(0, orders.length, filterdUsers.toList());
   }
 
-  sorting() {
+  sorting() async {
     if (isDescSorted.value) {
-      states.clear();
-      orders.sort((a, b) => -a['amount'].compareTo(b['amount']));
-      addStates();
+      List res = await db!.sort('''
+SELECT users.name AS username, currencies.name AS currencyName, 
+    orders.orderDate, orders.status AS state, orders.orderAmmount AS amount,
+    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId,
+    orders.userId, orders.currencyId
+    FROM orders JOIN users 
+    ON users.id=orders.userId JOIN currencies 
+    ON currencies.id=orders.currencyId ORDER BY orderAmmount DESC
+''');
+      orders.clear();
+      orders.addAll(res);
+      return res;
+
+      // states.clear();
+      // orders.sort((a, b) => -a['amount'].compareTo(b['amount']));
+      // addStates();
     } else {
-      states.clear();
-      orders.sort((a, b) => a['amount'].compareTo(b['amount']));
-      addStates();
+      List res = await db!.sort('''
+SELECT users.name AS username, currencies.name AS currencyName, 
+    orders.orderDate, orders.status AS state, orders.orderAmmount AS amount,
+    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId,
+    orders.userId, orders.currencyId
+    FROM orders JOIN users 
+    ON users.id=orders.userId JOIN currencies 
+    ON currencies.id=orders.currencyId ORDER BY orderAmmount
+''');
+      orders.clear();
+      orders.addAll(res);
+      return res;
+      // states.clear();
+      // orders.sort((a, b) => a['amount'].compareTo(b['amount']));
+      // addStates();
     }
   }
 

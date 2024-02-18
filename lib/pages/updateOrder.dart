@@ -41,7 +41,6 @@ class UpdateOrder extends GetView<OrderController> {
     getCurrency();
 
     dropDownController.updateSelectedType(Get.arguments['type']);
-
     dateController.text = Get.arguments['orderDate'];
     amountController.text = Get.arguments['orderAmmount'].toString();
     equalAmountController.text = Get.arguments['equalOrderAmmount'].toString();
