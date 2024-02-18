@@ -220,7 +220,8 @@ class AddOrder extends GetView<OrderController> {
                           ),
                         ),
                         onChanged: (value) {
-                          if (dropDownController.selectedCurrency.value != 0) {
+                          if (dropDownController.selectedCurrency.value != 0 &&
+                              amountController.text != '') {
                             double amount = double.parse(amountController.text);
                             int equalAmount = controller.findEqualAmmount(
                                 amount, controller.rate.value);

@@ -34,6 +34,7 @@ class UpdateOrder extends GetView<OrderController> {
       var currency =
           await currenciesController.getCurrency(Get.arguments['currencyId']);
       orderController.upadateSelectedCurrencyId(currency['id']);
+      orderController.updateCurrencyRate(currency['rate']);
     }
 
     getUser();
@@ -243,7 +244,8 @@ class UpdateOrder extends GetView<OrderController> {
                           ),
                         ),
                         onChanged: (value) {
-                          if (dropDownController.selectedCurrency.value != 0) {
+                          if (dropDownController.selectedCurrency.value != 0 &&
+                              amountController.text != '') {
                             double amount = double.parse(amountController.text);
                             int equalAmount = controller.findEqualAmmount(
                                 amount, controller.rate.value);

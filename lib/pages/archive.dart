@@ -18,7 +18,7 @@ class Archive extends GetView<UserController> {
     Get.put(UserController());
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 64, 99, 67),
         onPressed: () {

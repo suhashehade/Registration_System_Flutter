@@ -29,10 +29,8 @@ class DropDownController extends GetxController {
     if (value == 0) {
       return "Select User";
     }
-
     return null;
   }
-
 
   String? validateType(String value) {
     if (value == "") {
