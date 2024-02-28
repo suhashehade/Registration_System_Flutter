@@ -102,7 +102,7 @@ class Users extends GetView<UserController> {
                               IconButton(
                                 onPressed: () {
                                   Get.toNamed('/signUp',
-                                      arguments: UserArgument (
+                                      arguments: UserArgument(
                                           id: controller.users[index]['id'],
                                           user: User(
                                               name: controller.users[index]
@@ -177,7 +177,7 @@ class Users extends GetView<UserController> {
                                   );
                                   final File pdfFile =
                                       await UserInvoicePdf.generate(invoice);
-                                  Get.toNamed('/userOrdersInvoice', arguments: {
+                                  Get.toNamed('/pdfPage', arguments: {
                                     "file": pdfFile.path,
                                   });
                                 },

@@ -9,7 +9,6 @@ class OrderController extends GetxController {
   RxInt currencyId = 0.obs;
   RxDouble rate = 0.0.obs;
   RxString type = "".obs;
-  RxString stateKeyword = "".obs;
   RxBool isDescSorted = false.obs;
   RxBool isSorted = false.obs;
 
@@ -36,8 +35,6 @@ class OrderController extends GetxController {
   upadateSelectedUserId(int value) {
     userId.value = value;
   }
-
-  
 
   getOrders() async {
     List response = await db!.readJoin('''

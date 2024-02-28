@@ -10,7 +10,6 @@ import 'package:registration_app/pages/currenciesPage.dart';
 import 'package:registration_app/pages/ordersPage.dart';
 import 'package:registration_app/pages/pdfPage.dart';
 import 'package:registration_app/pages/sign_up.dart';
-import 'package:registration_app/pages/userOrdersInvoicePdf.dart';
 import 'package:registration_app/services/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/login.dart';
@@ -36,7 +35,6 @@ void main() async {
       GetPage(name: '/addOrder', page: () => AddOrder()),
       GetPage(name: '/signUp', page: () => SignUp()),
       GetPage(name: '/pdfPage', page: () => PdfView()),
-      GetPage(name: '/userOrdersInvoice', page: () => UserInvoiceOrdersPdf()),
     ],
   ));
 }
