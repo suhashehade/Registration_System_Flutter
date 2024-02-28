@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:registration_app/models/currencyArguments.dart';
 
 import '../controllers/currenciesController.dart';
 import '../models/currency.dart';
@@ -52,13 +53,16 @@ class CurrenciesList extends GetView<CurrenciesController> {
                       ),
                       IconButton(
                         onPressed: () {
-                          Get.toNamed('/addCurrency', arguments: {
-                            "id": controller.currencies[index]['id'],
-                            "currency": Currency(
-                                name: controller.currencies[index]['name'],
-                                symbol: controller.currencies[index]['symbol'],
-                                rate: controller.currencies[index]['rate'])
-                          });
+                          Get.toNamed('/addCurrency',
+                              arguments: CurrencyArguments(
+                                  id: controller.currencies[index]['id'],
+                                  currency: Currency(
+                                      name: controller.currencies[index]
+                                          ['name'],
+                                      symbol: controller.currencies[index]
+                                          ['symbol'],
+                                      rate: controller.currencies[index]
+                                          ['rate'])));
                         },
                         icon: const Icon(
                           Icons.edit,

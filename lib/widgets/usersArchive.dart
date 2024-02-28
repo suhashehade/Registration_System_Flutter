@@ -8,6 +8,7 @@ import 'package:registration_app/controllers/userController.dart';
 import 'package:registration_app/main.dart';
 import 'package:registration_app/models/invoiceInfo.dart';
 import 'package:registration_app/models/user.dart';
+import 'package:registration_app/models/userArguments.dart';
 import 'package:registration_app/models/userInvoice.dart';
 
 // ignore: must_be_immutable
@@ -100,19 +101,26 @@ class Users extends GetView<UserController> {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.toNamed('/signUp', arguments: {
-                                    "id": controller.users[index]['id'],
-                                    "user": User(
-                                        name: controller.users[index]['name'],
-                                        nationalNumber: (controller.users[index]
-                                            ['national_number']),
-                                        dateOfBirth: controller.users[index]
-                                            ['date_of_birth'],
-                                        title: controller.users[index]['title'],
-                                        photo: controller.users[index]['photo'],
-                                        phone: controller.users[index]['phone'],
-                                        email: controller.users[index]['email'])
-                                  });
+                                  Get.toNamed('/signUp',
+                                      arguments: UserArgument (
+                                          id: controller.users[index]['id'],
+                                          user: User(
+                                              name: controller.users[index]
+                                                  ['name'],
+                                              nationalNumber:
+                                                  (controller.users[index]
+                                                      ['national_number']),
+                                              dateOfBirth:
+                                                  controller.users[index]
+                                                      ['date_of_birth'],
+                                              title: controller.users[index]
+                                                  ['title'],
+                                              photo: controller.users[index]
+                                                  ['photo'],
+                                              phone: controller.users[index]
+                                                  ['phone'],
+                                              email: controller.users[index]
+                                                  ['email'])));
                                 },
                                 icon: const Icon(
                                   Icons.edit,

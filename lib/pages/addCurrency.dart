@@ -16,9 +16,9 @@ class AddCurrency extends GetView<CurrenciesController> {
     CurrenciesController currenciesController = Get.find();
 
     if (Get.arguments != null) {
-      nameController.text = Get.arguments['currency'].name;
-      symbolController.text = Get.arguments['currency'].symbol;
-      rateController.text = Get.arguments['currency'].rate.toString();
+      nameController.text = Get.arguments.currency.name;
+      symbolController.text = Get.arguments.currency.symbol;
+      rateController.text = Get.arguments.currency.rate.toString();
     }
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +114,7 @@ class AddCurrency extends GetView<CurrenciesController> {
                                 'currencies', currency);
                           } else {
                             await controller.updateCurrency(
-                                'currencies', currency, Get.arguments['id']);
+                                'currencies', currency, Get.arguments.id);
                           }
                           Get.back();
                         }

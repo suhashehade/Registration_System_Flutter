@@ -25,15 +25,16 @@ class SignUp extends GetView<AuthController> {
     Get.put(AuthController());
     FileUploadController fileUploadController = Get.put(FileUploadController());
     UserController userController = Get.put(UserController());
+
     if (Get.arguments != null) {
-      nameController.text = Get.arguments['user'].name;
+      nameController.text = Get.arguments.user.name;
       nationalNumberController.text =
-          Get.arguments['user'].nationalNumber.toString();
-      dateOfBirthController.text = Get.arguments['user'].dateOfBirth;
-      titleController.text = Get.arguments['user'].title;
-      fileUploadController.imagePath!.value = Get.arguments['user'].photo;
-      phoneController.text = Get.arguments['user'].phone;
-      emailController.text = Get.arguments['user'].email;
+          Get.arguments.user.nationalNumber.toString();
+      dateOfBirthController.text = Get.arguments.user.dateOfBirth;
+      titleController.text = Get.arguments.user.title;
+      fileUploadController.imagePath!.value = Get.arguments.user.photo;
+      phoneController.text = Get.arguments.user.phone;
+      emailController.text = Get.arguments.user.email;
     }
     return Scaffold(
       appBar: prefs!.getString('nNumber') != null
@@ -249,7 +250,7 @@ class SignUp extends GetView<AuthController> {
                               }
                             } else {
                               await userController.updateUser(
-                                  'users', user, Get.arguments['id']);
+                                  'users', user, Get.arguments.id);
                               Get.back();
                             }
                           }

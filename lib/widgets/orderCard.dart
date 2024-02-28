@@ -10,6 +10,7 @@ import 'package:registration_app/models/currency.dart';
 import 'package:registration_app/models/invoice.dart';
 import 'package:registration_app/models/invoiceInfo.dart';
 import 'package:registration_app/models/order.dart';
+import 'package:registration_app/models/orderArguments.dart';
 import 'package:registration_app/models/user.dart';
 
 class OrderCard extends GetView<OrderController> {
@@ -86,31 +87,34 @@ class OrderCard extends GetView<OrderController> {
                     IconButton(
                       color: const Color.fromARGB(255, 64, 99, 67),
                       onPressed: () {
-                        Get.toNamed('/addOrder', arguments: {
-                          "id": controller.orders[index]['orderId'],
-                          "user": User(
-                              name: controller.orders[index]['username'],
-                              nationalNumber: '',
-                              dateOfBirth: '',
-                              title: '',
-                              photo: '',
-                              phone: '',
-                              email: ''),
-                          "currency": Currency(
-                              name: controller.orders[index]['currencyName'],
-                              symbol: '',
-                              rate: controller.orders[index]['rate']),
-                          "order": Order(
-                              currencyId: controller.orders[index]
-                                  ['currencyId'],
-                              userId: controller.orders[index]['userId'],
-                              orderDate: controller.orders[index]['orderDate'],
-                              orderAmount: controller.orders[index]['amount'],
-                              equalOrderAmount: controller.orders[index]
-                                  ['equalAmount'],
-                              status: controller.orders[index]['state'],
-                              type: controller.orders[index]['type'])
-                        });
+                        Get.toNamed('/addOrder',
+                            arguments: OrderArgument(
+                                id: controller.orders[index]['orderId'],
+                                user: User(
+                                    name: controller.orders[index]['username'],
+                                    nationalNumber: '',
+                                    dateOfBirth: '',
+                                    title: '',
+                                    photo: '',
+                                    phone: '',
+                                    email: ''),
+                                currency: Currency(
+                                    name: controller.orders[index]
+                                        ['currencyName'],
+                                    symbol: '',
+                                    rate: controller.orders[index]['rate']),
+                                order: Order(
+                                    currencyId: controller.orders[index]
+                                        ['currencyId'],
+                                    userId: controller.orders[index]['userId'],
+                                    orderDate: controller.orders[index]
+                                        ['orderDate'],
+                                    orderAmount: controller.orders[index]
+                                        ['amount'],
+                                    equalOrderAmount: controller.orders[index]
+                                        ['equalAmount'],
+                                    status: controller.orders[index]['state'],
+                                    type: controller.orders[index]['type'])));
                       },
                       icon: const Icon(
                         Icons.edit,

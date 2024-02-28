@@ -28,32 +28,20 @@ class AddOrder extends GetView<OrderController> {
       "Return Purshased Order"
     ];
 
-    // getUser() async {
-    //   var user = await userController.getOne(Get.arguments['order'].userId);
-    //   controller.upadateSelectedUserId(user[0]['id']);
-    // }
-
-    // getCurrency() async {
-    //   var currency = await currenciesController
-    //       .getCurrency(Get.arguments['order'].currencyId);
-    //   controller.upadateSelectedCurrencyId(currency['id']);
-    //   controller.updateCurrencyRate(currency['rate']);
-    // }
-
     if (Get.arguments != null) {
-      controller.updateCurrencyRate(Get.arguments['currency'].rate);
-      controller.upadateSelectedCurrencyId(Get.arguments['order'].currencyId);
-      controller.upadateSelectedUserId(Get.arguments['order'].userId);
-      dateController.text = Get.arguments['order'].orderDate;
-      amountController.text = Get.arguments['order'].orderAmount.toString();
+      controller.updateCurrencyRate(Get.arguments.currency.rate);
+      controller.upadateSelectedCurrencyId(Get.arguments.order.currencyId);
+      controller.upadateSelectedUserId(Get.arguments.order.userId);
+      dateController.text = Get.arguments.order.orderDate;
+      amountController.text = Get.arguments.order.orderAmount.toString();
       equalAmountController.text =
-          Get.arguments['order'].equalOrderAmount.toString();
+          Get.arguments.order.equalOrderAmount.toString();
       dropDownController.selectedCurrency.value =
-          Get.arguments['order'].currencyId;
-      dropDownController.selectedUser.value = Get.arguments['order'].userId;
-      dropDownController.selectedType.value = Get.arguments['order'].type;
+          Get.arguments.order.currencyId;
+      dropDownController.selectedUser.value = Get.arguments.order.userId;
+      dropDownController.selectedType.value = Get.arguments.order.type;
       controller.isChecked.value =
-          Get.arguments['order'].status == 1 ? true : false;
+          Get.arguments.order.status == 1 ? true : false;
     }
 
     return Scaffold(
@@ -317,10 +305,9 @@ class AddOrder extends GetView<OrderController> {
                           type: dropDownController.selectedType.value);
                       if (Get.arguments == null) {
                         await controller.insert('orders', order);
-                        
                       } else {
                         await controller.updateOrder(
-                            'orders', order, Get.arguments['id']);
+                            'orders', order, Get.arguments.id);
                       }
                       controller.isChecked.value = false;
                       Get.back();
