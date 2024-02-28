@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/controllers/userController.dart';
-import 'package:registration_app/pages/archive.dart';
-import 'package:registration_app/pages/usersArchive.dart';
+import 'package:registration_app/widgets/archive.dart';
+import 'package:registration_app/widgets/usersArchive.dart';
 
 class UsersPage extends GetView<UserController> {
   const UsersPage({super.key});
@@ -14,7 +14,7 @@ class UsersPage extends GetView<UserController> {
         title: const Text('Users'),
         body: Users(),
         addBtnFuction: () {
-          Get.offNamed('/signUp');
+          Get.toNamed('/signUp');
         });
   }
 }

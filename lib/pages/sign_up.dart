@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:registration_app/controllers/authController.dart';
 import 'package:intl/intl.dart';
 import 'package:registration_app/controllers/fileUploadController.dart';
+import 'package:registration_app/main.dart';
+import 'package:registration_app/models/user.dart';
+import '../controllers/userController.dart';
 
 // ignore: must_be_immutable
 class SignUp extends GetView<AuthController> {
@@ -14,12 +17,34 @@ class SignUp extends GetView<AuthController> {
   TextEditingController nationalNumberController = TextEditingController();
   TextEditingController dateOfBirthController = TextEditingController();
   TextEditingController titleController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Get.put(AuthController());
     FileUploadController fileUploadController = Get.put(FileUploadController());
+    UserController userController = Get.put(UserController());
+    if (Get.arguments != null) {
+      nameController.text = Get.arguments['user'].name;
+      nationalNumberController.text =
+          Get.arguments['user'].nationalNumber.toString();
+      dateOfBirthController.text = Get.arguments['user'].dateOfBirth;
+      titleController.text = Get.arguments['user'].title;
+      fileUploadController.imagePath!.value = Get.arguments['user'].photo;
+      phoneController.text = Get.arguments['user'].phone;
+      emailController.text = Get.arguments['user'].email;
+    }
     return Scaffold(
+      appBar: prefs!.getString('nNumber') != null
+          ? Get.arguments == null
+              ? AppBar(
+                  title: const Text("ADD"),
+                )
+              : AppBar(
+                  title: const Text("UPDATE"),
+                )
+          : null,
       backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(40.0),
@@ -29,12 +54,19 @@ class SignUp extends GetView<AuthController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Text(
-                    'SIGN UP',
-                    style: TextStyle(
-                      fontSize: 30.0,
-                    ),
-                  ),
+                  Get.arguments == null
+                      ? const Text(
+                          'SIGN UP',
+                          style: TextStyle(
+                            fontSize: 30.0,
+                          ),
+                        )
+                      : const Text(
+                          'UPDATE',
+                          style: TextStyle(
+                            fontSize: 30.0,
+                          ),
+                        ),
                   const SizedBox(
                     height: 30.0,
                   ),
@@ -133,8 +165,38 @@ class SignUp extends GetView<AuthController> {
                       return null;
                     },
                   ),
+                  TextFormField(
+                    controller: phoneController,
+                    decoration: const InputDecoration(
+                      label: Text(
+                        'Phone',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please fill the input';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      label: Text(
+                        'Email',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please fill the input';
+                      }
+                      return null;
+                    },
+                  ),
                   const SizedBox(
-                    height: 120.0,
+                    height: 40.0,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -143,49 +205,104 @@ class SignUp extends GetView<AuthController> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            Map<String, String> user = {
-                              "name": nameController.text,
-                              "national_number": nationalNumberController.text,
-                              "date_of_birth": dateOfBirthController.text,
-                              "title": titleController.text,
-                              "photo": fileUploadController.imagePath!.value
-                            };
+                            User user = User(
+                                name: nameController.text,
+                                nationalNumber: nationalNumberController.text,
+                                dateOfBirth: dateOfBirthController.text,
+                                title: titleController.text,
+                                photo: fileUploadController.imagePath!.value,
+                                phone: phoneController.text,
+                                email: emailController.text);
 
-                            await controller.signUp('users', user);
-                            Get.offNamed('/archive');
+                            if (Get.arguments == null) {
+                              int res =
+                                  await userController.insert('users', user);
+                              if (res > 0) {
+                                Get.back();
+                                fileUploadController.imagePath!.value = '';
+                                titleController.text = '';
+                                nameController.text = '';
+                                nameController.text = '';
+                                dateOfBirthController.text = '';
+                                phoneController.text = '';
+                                emailController.text = '';
+
+                                prefs!.getString('nNumber') == null
+                                    ? Get.snackbar(
+                                        "DONE",
+                                        "Sign Up successfully, you can login now",
+                                        colorText: Colors.white,
+                                        snackPosition: SnackPosition.TOP,
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 101, 172, 116),
+                                        icon: const Icon(Icons.done),
+                                      )
+                                    : Get.snackbar(
+                                        "DONE",
+                                        "User Added successfully",
+                                        colorText: Colors.white,
+                                        snackPosition: SnackPosition.TOP,
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 101, 172, 116),
+                                        icon: const Icon(Icons.done),
+                                      );
+                              }
+                            } else {
+                              await userController.updateUser(
+                                  'users', user, Get.arguments['id']);
+                              Get.back();
+                            }
                           }
                         },
-                        child: const Text(
-                          'SIGN UP',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                          ),
-                        ),
+                        child: prefs!.getString('nNumber') == null
+                            ? const Text(
+                                'SIGN UP',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                ),
+                              )
+                            : Get.arguments == null
+                                ? const Text(
+                                    'ADD',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                    ),
+                                  )
+                                : const Text(
+                                    'UPDATE',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 80.0,
+                    height: 40.0,
                   ),
-                  Row(
-                    children: <Widget>[
-                      const Text(
-                        "You you an account? ",
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.offNamed('/');
-                        },
-                        child: const Text(
-                          "Sign In",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    ],
-                  )
+                  prefs!.getString('nNumber') == null
+                      ? Row(
+                          children: <Widget>[
+                            const Text(
+                              "You you an account? ",
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed('/');
+                              },
+                              child: const Text(
+                                "Sign In",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          ],
+                        )
+                      : const Text('')
                 ],
               ),
             )),

@@ -35,7 +35,7 @@ class SideBar extends GetView<ShowPagesController> {
                 },
               ),
               ListTile(
-                title: const Text('Curruncies'),
+                title: const Text('Currencies'),
                 onTap: () {
                   Get.back();
                   controller.toggleCurrentPage('currencies');

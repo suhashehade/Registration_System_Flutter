@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:registration_app/main.dart';
+import 'package:registration_app/models/order.dart';
 
 class OrderController extends GetxController {
   RxList orders = [].obs;
-  RxList states = [].obs;
   RxBool isChecked = false.obs;
   RxInt userId = 0.obs;
   RxInt currencyId = 0.obs;
@@ -19,15 +19,6 @@ class OrderController extends GetxController {
 
   changeSorted() {
     isSorted.value = true;
-  }
-
-  updateStateKeyWord(value) {
-    if (value == 1) {
-      stateKeyword.value = "Paid";
-    } else {
-      stateKeyword.value = "Not Paid";
-    }
-    return stateKeyword.value;
   }
 
   updateCurrencyRate(double value) {
@@ -46,48 +37,88 @@ class OrderController extends GetxController {
     userId.value = value;
   }
 
+  
+
   getOrders() async {
     List response = await db!.readJoin('''
-    SELECT users.name AS username, currencies.name AS currencyName, 
-    orders.orderDate, orders.status AS state, orders.orderAmmount AS amount,
-    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId,
+    SELECT users.name AS username, users.national_number AS nationalNumber, 
+    users.date_of_birth AS dateOfBirth, users.phone, users.photo, users.email,
+    users.title, currencies.name AS currencyName, currencies.symbol, currencies.rate,
+    orders.orderDate, orders.status AS state, orders.orderAmount AS amount,
+    orders.type AS type, orders.equalOrderAmount AS equalAmount, orders.id AS orderId,
     orders.userId, orders.currencyId
     FROM orders JOIN users 
     ON users.id=orders.userId JOIN currencies 
     ON currencies.id=orders.currencyId
 ''');
     orders.addAll(response);
-    addStates();
   }
 
-  updateOrder(String table, Map<String, dynamic> order, int id) async {
-    int res = await db!.update(table, order, "id=$id");
-    return res;
-  }
-
-  addStates() {
-    Iterable orderStates = orders.map((o) => o['state']);
-    states.addAll(orderStates);
-  }
-
-  switchOrderState(int index, bool value) {
-    states[index] = value ? 1 : 0;
+  updateOrder(String table, Order order, int id) async {
+    Map<String, dynamic> orderMap = order.toMap();
+    int res = await db!.update(table, orderMap, "id=$id");
+    if (res > 0) {
+      await updateLocalOrder(id);
+    }
   }
 
   invertSorting() {
     isDescSorted.value = !isDescSorted.value;
   }
 
-  insert(String table, Map<String, dynamic> order) async {
-    int response = await db!.insert(table, order);
+  insert(String table, Order order) async {
+    Map<String, dynamic> orderMap = order.toMap();
+    int response = await db!.insert(table, orderMap);
+    List<Map> inserted = await getLast();
+    Map insertedOrder = inserted[0];
+    orders.add(insertedOrder);
     return response;
   }
 
-  updateOrderState(int state, int id) async {
+  getLast() async {
+    List<Map> response = await db!.getLast('''
+ SELECT users.name AS username, users.national_number AS nationalNumber, 
+    users.date_of_birth AS dateOfBirth, users.phone, users.photo, users.email,
+    users.title, currencies.name AS currencyName, currencies.symbol, currencies.rate,
+    orders.orderDate, orders.status AS state, orders.orderAmount AS amount,
+    orders.type AS type, orders.equalOrderAmount AS equalAmount, orders.id AS orderId,
+    orders.userId, orders.currencyId
+    FROM orders JOIN users 
+    ON users.id=orders.userId JOIN currencies 
+    ON currencies.id=orders.currencyId ORDER BY orders.id DESC LIMIT 1
+''');
+
+    return response;
+  }
+
+  updateOrderState(bool state, int id) async {
     int response = await db!.updateOrderState('''
     UPDATE 'orders' SET status=$state WHERE id=$id
 ''');
     return response;
+  }
+
+  getOne(int id) async {
+    List<Map> oneOrder = await db!.getOneOrder(''' 
+    SELECT users.name AS username, users.national_number AS nationalNumber, 
+    users.date_of_birth AS dateOfBirth, users.phone, users.photo, users.email,
+    users.title, currencies.name AS currencyName, currencies.symbol, currencies.rate,
+    orders.orderDate, orders.status AS state, orders.orderAmount AS amount,
+    orders.type AS type, orders.equalOrderAmount AS equalAmount, orders.id AS orderId,
+    orders.userId, orders.currencyId
+    FROM orders JOIN users 
+    ON users.id=orders.userId JOIN currencies 
+    ON currencies.id=orders.currencyId WHERE orders.id=$id LIMIT 1
+''');
+    return oneOrder;
+  }
+
+  updateLocalOrder(int id) async {
+    List oneOrder = await getOne(id);
+    Map order = oneOrder[0];
+    int index = orders.indexWhere((o) => o['orderId'] == id);
+    orders.removeAt(index);
+    orders.insert(index, order);
   }
 
   delete(String table, int id) async {
@@ -104,17 +135,13 @@ class OrderController extends GetxController {
   }
 
   getAllPaid() {
-    // states.clear();
     Iterable filterdUsers = orders.where((element) => element['state'] == 1);
     orders.replaceRange(0, orders.length, filterdUsers.toList());
-    // addStates();
   }
 
   getAllNotPaid() {
-    // states.clear();
     Iterable filterdUsers = orders.where((element) => element['state'] == 0);
     orders.replaceRange(0, orders.length, filterdUsers.toList());
-    // addStates();
   }
 
   filter(String value) {
@@ -126,38 +153,9 @@ class OrderController extends GetxController {
 
   sorting() async {
     if (isDescSorted.value) {
-      List res = await db!.sort('''
-SELECT users.name AS username, currencies.name AS currencyName, 
-    orders.orderDate, orders.status AS state, orders.orderAmmount AS amount,
-    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId,
-    orders.userId, orders.currencyId
-    FROM orders JOIN users 
-    ON users.id=orders.userId JOIN currencies 
-    ON currencies.id=orders.currencyId ORDER BY orderAmmount DESC
-''');
-      orders.clear();
-      orders.addAll(res);
-      return res;
-
-      // states.clear();
-      // orders.sort((a, b) => -a['amount'].compareTo(b['amount']));
-      // addStates();
+      orders.sort((a, b) => -a['amount'].compareTo(b['amount']));
     } else {
-      List res = await db!.sort('''
-SELECT users.name AS username, currencies.name AS currencyName, 
-    orders.orderDate, orders.status AS state, orders.orderAmmount AS amount,
-    orders.type AS type, orders.equalOrderAmmount AS equalAmount, orders.id AS orderId,
-    orders.userId, orders.currencyId
-    FROM orders JOIN users 
-    ON users.id=orders.userId JOIN currencies 
-    ON currencies.id=orders.currencyId ORDER BY orderAmmount
-''');
-      orders.clear();
-      orders.addAll(res);
-      return res;
-      // states.clear();
-      // orders.sort((a, b) => a['amount'].compareTo(b['amount']));
-      // addStates();
+      orders.sort((a, b) => a['amount'].compareTo(b['amount']));
     }
   }
 

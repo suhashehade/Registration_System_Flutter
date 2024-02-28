@@ -8,10 +8,9 @@ import 'package:registration_app/pages/addOrder.dart';
 import 'package:registration_app/pages/archivePage.dart';
 import 'package:registration_app/pages/currenciesPage.dart';
 import 'package:registration_app/pages/ordersPage.dart';
+import 'package:registration_app/pages/pdfPage.dart';
 import 'package:registration_app/pages/sign_up.dart';
-import 'package:registration_app/pages/updateCurrency.dart';
-import 'package:registration_app/pages/updateOrder.dart';
-import 'package:registration_app/pages/updateUser.dart';
+import 'package:registration_app/pages/userOrdersInvoicePdf.dart';
 import 'package:registration_app/services/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/login.dart';
@@ -31,14 +30,13 @@ void main() async {
         AuthMiddleware(),
       ]),
       GetPage(name: '/archive', page: () => const ArchivePage()),
-      GetPage(name: '/updateUser', page: () => UpdateUser()),
       GetPage(name: '/orders', page: () => const OrdersPage()),
       GetPage(name: '/currencies', page: () => const CurrenciesPage()),
       GetPage(name: '/addCurrency', page: () => AddCurrency()),
-      GetPage(name: '/updateCurrency', page: () => UpdateCurrency()),
       GetPage(name: '/addOrder', page: () => AddOrder()),
-      GetPage(name: '/updateOrder', page: () => UpdateOrder()),
       GetPage(name: '/signUp', page: () => SignUp()),
+      GetPage(name: '/pdfPage', page: () => PdfView()),
+      GetPage(name: '/userOrdersInvoice', page: () => UserInvoiceOrdersPdf()),
     ],
   ));
 }

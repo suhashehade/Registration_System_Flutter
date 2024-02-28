@@ -29,7 +29,9 @@ class DB {
                 "national_number" TEXT NOT NULL UNIQUE,
                 "date_of_birth" DATE,
                 "title" TEXT, 
-                "photo" TEXT
+                "photo" TEXT, 
+                "phone" TEXT,
+                "email" TEXT
                )
                 
     ''');
@@ -47,9 +49,9 @@ class DB {
         "currencyId" INTEGER NOT NULL,
         "userId" INTEGER NOT NULL,
         "orderDate" DATE NOT NULL,
-        "orderAmmount" INTEGER,
-        "equalOrderAmmount" REAL,
-        "status" INTEGER,
+        "orderAmount" INTEGER,
+        "equalOrderAmount" REAL,
+        "status" BOOLEAN,
         "type" TEXT,
         FOREIGN KEY(currencyId) REFERENCES currencies(id),
         FOREIGN KEY(userId) REFERENCES users(id)
@@ -78,9 +80,21 @@ class DB {
     return response;
   }
 
-  insert(String table, Map<String, dynamic> user) async {
+  getLast(String sql) async {
     Database? mydb = await db;
-    int response = await mydb!.insert(table, user);
+    List<Map> response = await mydb!.rawQuery(sql);
+    return response;
+  }
+
+  getOneOrder(String sql) async {
+    Database? mydb = await db;
+    List<Map> response = await mydb!.rawQuery(sql);
+    return response;
+  }
+
+  insert(String table, Map<String, dynamic> object) async {
+    Database? mydb = await db;
+    int response = await mydb!.insert(table, object);
     return response;
   }
 

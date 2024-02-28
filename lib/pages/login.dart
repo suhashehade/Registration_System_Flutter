@@ -121,6 +121,7 @@ class Login extends GetView<AuthController> {
                           onChanged: (bool? value) {
                             prefs!.setString('name', name.text);
                             prefs!.setString('nNumber', nationalNumber.text);
+                             prefs!.setString('name', name.text);
                             controller.toggleCheck(value);
                           },
                         );
@@ -135,7 +136,7 @@ class Login extends GetView<AuthController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.offNamed('/signUp');
+                          Get.toNamed('/signUp');
                         },
                         child: const Text(
                           "Sign Up",

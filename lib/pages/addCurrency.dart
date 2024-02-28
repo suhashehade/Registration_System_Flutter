@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/controllers/currenciesController.dart';
+import 'package:registration_app/models/currency.dart';
 
 // ignore: must_be_immutable
 class AddCurrency extends GetView<CurrenciesController> {
@@ -13,27 +14,29 @@ class AddCurrency extends GetView<CurrenciesController> {
   @override
   Widget build(BuildContext context) {
     CurrenciesController currenciesController = Get.find();
+
+    if (Get.arguments != null) {
+      nameController.text = Get.arguments['currency'].name;
+      symbolController.text = Get.arguments['currency'].symbol;
+      rateController.text = Get.arguments['currency'].rate.toString();
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 64, 99, 67),
-        title: const Text(
-          'Add Currency',
-          style: TextStyle(
-            color: Color.fromARGB(255, 243, 239, 204),
-          ),
-        ),
+        title: Get.arguments == null
+            ? const Text(
+                'New Currency',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 243, 239, 204),
+                ),
+              )
+            : const Text(
+                'Edit Currency',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 243, 239, 204),
+                ),
+              ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Color.fromARGB(255, 243, 239, 204),
-            ),
-            onPressed: () {
-              Get.offNamed('/archive');
-            },
-          ),
-        ],
       ),
       backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
@@ -102,23 +105,33 @@ class AddCurrency extends GetView<CurrenciesController> {
                       color: const Color.fromARGB(255, 64, 99, 67),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          Map<String, String> currency = {
-                            "name": nameController.text,
-                            "symbol": symbolController.text,
-                            "rate": rateController.text,
-                          };
-
-                          await currenciesController.insert(
-                              'currencies', currency);
-                          Get.offNamed('/archive');
+                          Currency currency = Currency(
+                              name: nameController.text,
+                              symbol: symbolController.text,
+                              rate: double.parse(rateController.text));
+                          if (Get.arguments == null) {
+                            await currenciesController.insert(
+                                'currencies', currency);
+                          } else {
+                            await controller.updateCurrency(
+                                'currencies', currency, Get.arguments['id']);
+                          }
+                          Get.back();
                         }
                       },
-                      child: const Text(
-                        'ADD CURRENCY',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 243, 239, 204),
-                        ),
-                      ),
+                      child: Get.arguments == null
+                          ? const Text(
+                              'ADD CURRENCY',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 243, 239, 204),
+                              ),
+                            )
+                          : const Text(
+                              'SAVE CHANGES',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 243, 239, 204),
+                              ),
+                            ),
                     ),
                   ],
                 ),

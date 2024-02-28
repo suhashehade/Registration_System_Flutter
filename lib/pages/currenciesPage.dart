@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/controllers/currenciesController.dart';
-import 'package:registration_app/pages/archive.dart';
-import 'package:registration_app/pages/currenciesArchive.dart';
+import 'package:registration_app/widgets/archive.dart';
+import 'package:registration_app/widgets/currenciesArchive.dart';
 
 class CurrenciesPage extends GetView<CurrenciesController> {
   const CurrenciesPage({super.key});
@@ -14,7 +14,7 @@ class CurrenciesPage extends GetView<CurrenciesController> {
       title: const Text('Currencies'),
       body: Currencies(),
       addBtnFuction: () {
-        Get.offNamed('/addCurrency');
+        Get.toNamed('/addCurrency');
       },
     );
   }

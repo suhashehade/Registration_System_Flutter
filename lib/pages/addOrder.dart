@@ -5,6 +5,7 @@ import 'package:registration_app/controllers/currenciesController.dart';
 import 'package:registration_app/controllers/dropDownController.dart';
 import 'package:registration_app/controllers/orderController.dart';
 import 'package:registration_app/controllers/userController.dart';
+import 'package:registration_app/models/order.dart';
 
 // ignore: must_be_immutable
 class AddOrder extends GetView<OrderController> {
@@ -27,27 +28,51 @@ class AddOrder extends GetView<OrderController> {
       "Return Purshased Order"
     ];
 
+    // getUser() async {
+    //   var user = await userController.getOne(Get.arguments['order'].userId);
+    //   controller.upadateSelectedUserId(user[0]['id']);
+    // }
+
+    // getCurrency() async {
+    //   var currency = await currenciesController
+    //       .getCurrency(Get.arguments['order'].currencyId);
+    //   controller.upadateSelectedCurrencyId(currency['id']);
+    //   controller.updateCurrencyRate(currency['rate']);
+    // }
+
+    if (Get.arguments != null) {
+      controller.updateCurrencyRate(Get.arguments['currency'].rate);
+      controller.upadateSelectedCurrencyId(Get.arguments['order'].currencyId);
+      controller.upadateSelectedUserId(Get.arguments['order'].userId);
+      dateController.text = Get.arguments['order'].orderDate;
+      amountController.text = Get.arguments['order'].orderAmount.toString();
+      equalAmountController.text =
+          Get.arguments['order'].equalOrderAmount.toString();
+      dropDownController.selectedCurrency.value =
+          Get.arguments['order'].currencyId;
+      dropDownController.selectedUser.value = Get.arguments['order'].userId;
+      dropDownController.selectedType.value = Get.arguments['order'].type;
+      controller.isChecked.value =
+          Get.arguments['order'].status == 1 ? true : false;
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 64, 99, 67),
-        title: const Text(
-          'Orders',
-          style: TextStyle(
-            color: Color.fromARGB(255, 243, 239, 204),
-          ),
-        ),
+        title: Get.arguments == null
+            ? const Text(
+                'New Order',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 243, 239, 204),
+                ),
+              )
+            : const Text(
+                'Edit Order',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 243, 239, 204),
+                ),
+              ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Color.fromARGB(255, 243, 239, 204),
-            ),
-            onPressed: () {
-              Get.offNamed('/archive');
-            },
-          ),
-        ],
       ),
       backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
@@ -281,27 +306,39 @@ class AddOrder extends GetView<OrderController> {
                   color: const Color.fromARGB(255, 64, 99, 67),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Map<String, dynamic> order = {
-                        "currencyId": controller.currencyId.value,
-                        "userId": controller.userId.value,
-                        "orderDate": dateController.text,
-                        "orderAmmount": amountController.text,
-                        "equalOrderAmmount": equalAmountController.text,
-                        "status": controller.isChecked.value ? 1 : 0,
-                        "type": controller.type.value,
-                      };
-
-                      await controller.insert('orders', order);
-
-                      Get.offNamed('/archive');
+                      Order order = Order(
+                          currencyId: controller.currencyId.value,
+                          userId: controller.userId.value,
+                          orderDate: dateController.text,
+                          orderAmount: int.parse(amountController.text),
+                          equalOrderAmount:
+                              double.parse(equalAmountController.text),
+                          status: controller.isChecked.value ? 1 : 0,
+                          type: dropDownController.selectedType.value);
+                      if (Get.arguments == null) {
+                        await controller.insert('orders', order);
+                        
+                      } else {
+                        await controller.updateOrder(
+                            'orders', order, Get.arguments['id']);
+                      }
+                      controller.isChecked.value = false;
+                      Get.back();
                     }
                   },
-                  child: const Text(
-                    'ADD ORDER',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 243, 239, 204),
-                    ),
-                  ),
+                  child: Get.arguments == null
+                      ? const Text(
+                          'ADD ORDER',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 243, 239, 204),
+                          ),
+                        )
+                      : const Text(
+                          'SAVE CHANGES',
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 243, 239, 204),
+                          ),
+                        ),
                 ),
               ],
             ),
