@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:registration_app/controllers/auth_controller.dart';
-import 'package:registration_app/controllers/google_auth_controller.dart';
 import 'package:registration_app/main.dart';
 import 'package:registration_app/services/db.dart';
 
 // ignore: must_be_immutable
 class Login extends GetView<AuthController> {
   DB db = DB();
-  GoogleAuthController googleAuthController = Get.put(GoogleAuthController());
 
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
