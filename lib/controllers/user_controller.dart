@@ -10,7 +10,7 @@ class UserController extends GetxController {
     users.addAll(response);
   }
 
-  insert(String table, User user) async {
+  insert(String table, CustomUser user) async {
     Map<String, dynamic> userMap = user.toMap();
     int response = await db!.insert(table, userMap);
     if (response > 0) {
@@ -35,7 +35,7 @@ class UserController extends GetxController {
     }
   }
 
-  updateUser(String table, User user, int id) async {
+  updateUser(String table, CustomUser user, int id) async {
     Map<String, dynamic> userMap = user.toMap();
     int res = await db!.update(table, userMap, "id=$id");
     if (res > 0) {
@@ -62,9 +62,8 @@ class UserController extends GetxController {
     users.replaceRange(0, users.length, filterdUsers.toList());
   }
 
-  getCurrentUser(String nationalNumber) async {
-    List<Map> response =
-        await db!.getOne('users', "national_number=$nationalNumber");
+  getCurrentUser(String email) async {
+    List<Map> response = await db!.getOne('users', "email=$email");
     Map user = response[0];
     return user;
   }

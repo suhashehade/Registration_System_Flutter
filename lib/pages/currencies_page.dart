@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/currenciesController.dart';
+import 'package:registration_app/controllers/currencies_controller.dart';
 import 'package:registration_app/widgets/archive.dart';
-import 'package:registration_app/widgets/currenciesArchive.dart';
+import 'package:registration_app/widgets/currencies_archive.dart';
 
 class CurrenciesPage extends GetView<CurrenciesController> {
   const CurrenciesPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/userController.dart';
+import 'package:registration_app/controllers/user_controller.dart';
 import 'package:registration_app/widgets/archive.dart';
-import 'package:registration_app/widgets/usersArchive.dart';
+import 'package:registration_app/widgets/users_archive.dart';
 
 class UsersPage extends GetView<UserController> {
   const UsersPage({super.key});

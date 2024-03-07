@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/orderController.dart';
-import 'package:registration_app/widgets/ordersList.dart';
+import 'package:registration_app/controllers/order_controller.dart';
+import 'package:registration_app/widgets/orders_list.dart';
 
 // ignore: must_be_immutable
 class Orders extends GetView<OrderController> {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/showPagesController.dart';
-import 'package:registration_app/pages/currenciesPage.dart';
-import 'package:registration_app/pages/ordersPage.dart';
-import 'package:registration_app/widgets/sideBar.dart';
-import 'package:registration_app/pages/usersPage.dart';
+import 'package:registration_app/controllers/show_pages_controller.dart';
+import 'package:registration_app/pages/currencies_page.dart';
+import 'package:registration_app/pages/orders_page.dart';
+import 'package:registration_app/widgets/sidebar.dart';
+import 'package:registration_app/pages/users_page.dart';
 
 class ArchivePage extends GetView<ShowPagesController> {
   const ArchivePage({super.key});

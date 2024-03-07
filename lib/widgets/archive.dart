@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/userController.dart';
+import 'package:registration_app/controllers/user_controller.dart';
 
 // ignore: must_be_immutable
 class Archive extends GetView<UserController> {

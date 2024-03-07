@@ -11,6 +11,7 @@ class FileUploadController extends GetxController {
       if (pickedImage == null) return;
       imagePath!.value = pickedImage.path;
     } catch (error) {
+      // ignore: avoid_print
       print(error);
     }
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/currenciesController.dart';
-import 'package:registration_app/widgets/currenciesList.dart';
+import 'package:registration_app/controllers/currencies_controller.dart';
+import 'package:registration_app/widgets/currencies_list.dart';
 
 // ignore: must_be_immutable
 class Currencies extends GetView<CurrenciesController> {

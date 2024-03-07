@@ -1,4 +1,4 @@
-import 'package:registration_app/models/invoiceInfo.dart';
+import 'package:registration_app/models/invoice_info.dart';
 import 'package:registration_app/models/user.dart';
 
 class UserInvoice {
@@ -9,7 +9,7 @@ class UserInvoice {
       required this.invoiceInfo});
 
   final List userOrders;
-  final User supplier;
-  final User customer;
+  final CustomUser supplier;
+  final CustomUser customer;
   final InvoiceInfo invoiceInfo;
 }

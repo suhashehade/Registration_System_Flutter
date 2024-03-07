@@ -1,4 +1,4 @@
-class User {
+class CustomUser {
   final String name;
   final String nationalNumber;
   final String dateOfBirth;
@@ -7,7 +7,7 @@ class User {
   final String phone;
   final String email;
 
-  User(
+  CustomUser(
       {required this.name,
       required this.nationalNumber,
       required this.dateOfBirth,

@@ -3,13 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/api/user_invoice.dart';
-import 'package:registration_app/controllers/orderController.dart';
-import 'package:registration_app/controllers/userController.dart';
-import 'package:registration_app/main.dart';
-import 'package:registration_app/models/invoiceInfo.dart';
+import 'package:registration_app/controllers/order_controller.dart';
+import 'package:registration_app/controllers/user_controller.dart';
+import 'package:registration_app/models/invoice_info.dart';
 import 'package:registration_app/models/user.dart';
-import 'package:registration_app/models/userArguments.dart';
-import 'package:registration_app/models/userInvoice.dart';
+import 'package:registration_app/models/user_arguments.dart';
+import 'package:registration_app/models/user_invoice.dart';
 
 // ignore: must_be_immutable
 class Users extends GetView<UserController> {
@@ -104,7 +103,7 @@ class Users extends GetView<UserController> {
                                   Get.toNamed('/signUp',
                                       arguments: UserArgument(
                                           id: controller.users[index]['id'],
-                                          user: User(
+                                          user: CustomUser(
                                               name: controller.users[index]
                                                   ['name'],
                                               nationalNumber:
@@ -129,10 +128,6 @@ class Users extends GetView<UserController> {
                               ),
                               InkWell(
                                 onTap: () async {
-                                  Map supplier =
-                                      await controller.getCurrentUser(prefs!
-                                          .getString('nNumber')
-                                          .toString());
                                   List<Map> customerList = await controller
                                       .getOne(controller.users[index]['id']);
                                   Map customer = customerList[0];
@@ -146,16 +141,15 @@ class Users extends GetView<UserController> {
                                   final random = Random(4);
                                   UserInvoice invoice = UserInvoice(
                                     userOrders: orders.toList(),
-                                    supplier: User(
-                                        name:
-                                            prefs!.getString('name').toString(),
+                                    supplier: CustomUser(
+                                        name: 'Spinel Technology',
                                         nationalNumber: '',
                                         dateOfBirth: '',
-                                        title: supplier['title'],
+                                        title: 'TECH',
                                         photo: '',
-                                        phone: supplier['phone'],
-                                        email: supplier['email']),
-                                    customer: User(
+                                        phone: '123637845',
+                                        email: 'spinel@gmail.com'),
+                                    customer: CustomUser(
                                         name: customer['name'],
                                         nationalNumber: '',
                                         dateOfBirth: '',

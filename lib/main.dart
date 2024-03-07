@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/showPagesController.dart';
-import 'package:registration_app/controllers/sideBarController.dart';
-import 'package:registration_app/middlewares/authMiddleware.dart';
-import 'package:registration_app/pages/addCurrency.dart';
-import 'package:registration_app/pages/addOrder.dart';
-import 'package:registration_app/pages/archivePage.dart';
-import 'package:registration_app/pages/currenciesPage.dart';
-import 'package:registration_app/pages/ordersPage.dart';
-import 'package:registration_app/pages/pdfPage.dart';
+import 'package:registration_app/controllers/show_pages_controller.dart';
+import 'package:registration_app/controllers/sidebar_controller.dart';
+import 'package:registration_app/middlewares/auth_middleware.dart';
+import 'package:registration_app/pages/add_currency.dart';
+import 'package:registration_app/pages/add_order.dart';
+import 'package:registration_app/pages/archive_page.dart';
+import 'package:registration_app/pages/currencies_page.dart';
+import 'package:registration_app/pages/orders_page.dart';
+import 'package:registration_app/pages/pdf_page.dart';
 import 'package:registration_app/pages/sign_up.dart';
 import 'package:registration_app/services/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'pages/login.dart';
+import 'firebase_options.dart';
 
 SharedPreferences? prefs;
 DB? db;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   prefs = await SharedPreferences.getInstance();
   db = DB();
   Get.put(SideBarController());

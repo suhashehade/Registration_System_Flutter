@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/currenciesController.dart';
-import 'package:registration_app/controllers/orderController.dart';
+import 'package:registration_app/controllers/currencies_controller.dart';
+import 'package:registration_app/controllers/order_controller.dart';
 import 'package:registration_app/widgets/archive.dart';
-import 'package:registration_app/widgets/ordersArchive.dart';
+import 'package:registration_app/widgets/orders_archive.dart';
 
 class OrdersPage extends GetView<OrderController> {
   const OrdersPage({super.key});

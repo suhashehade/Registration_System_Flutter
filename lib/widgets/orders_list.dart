@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/orderController.dart';
-import 'package:registration_app/widgets/orderCard.dart';
+import 'package:registration_app/controllers/order_controller.dart';
+import 'package:registration_app/widgets/order_card.dart';
 
 class OrderList extends GetView<OrderController> {
   const OrderList({super.key});

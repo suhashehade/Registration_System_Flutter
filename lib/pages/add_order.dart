@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:registration_app/controllers/currenciesController.dart';
-import 'package:registration_app/controllers/dropDownController.dart';
-import 'package:registration_app/controllers/orderController.dart';
-import 'package:registration_app/controllers/userController.dart';
+import 'package:registration_app/controllers/currencies_controller.dart';
+import 'package:registration_app/controllers/dropdown_controller.dart';
+import 'package:registration_app/controllers/order_controller.dart';
+import 'package:registration_app/controllers/user_controller.dart';
 import 'package:registration_app/models/order.dart';
 
 // ignore: must_be_immutable

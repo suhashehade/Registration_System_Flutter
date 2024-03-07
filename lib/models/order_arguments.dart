@@ -5,7 +5,7 @@ import 'package:registration_app/models/user.dart';
 class OrderArgument {
   final int id;
   final Order order;
-  final User user;
+  final CustomUser user;
   final Currency currency;
 
   OrderArgument(

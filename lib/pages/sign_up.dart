@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/authController.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:registration_app/controllers/auth_controller.dart';
 import 'package:intl/intl.dart';
-import 'package:registration_app/controllers/fileUploadController.dart';
+import 'package:registration_app/controllers/file_upload_controller.dart';
 import 'package:registration_app/main.dart';
 import 'package:registration_app/models/user.dart';
-import '../controllers/userController.dart';
+import '../controllers/user_controller.dart';
 
 // ignore: must_be_immutable
 class SignUp extends GetView<AuthController> {
@@ -37,15 +38,17 @@ class SignUp extends GetView<AuthController> {
       emailController.text = Get.arguments.user.email;
     }
     return Scaffold(
-      appBar: prefs!.getString('nNumber') != null
-          ? Get.arguments == null
+      appBar: Get.arguments == null && prefs!.getString('email') == null
+          ? null
+          : Get.arguments == null && prefs!.getString('email') != null
               ? AppBar(
                   title: const Text("ADD"),
                 )
-              : AppBar(
-                  title: const Text("UPDATE"),
-                )
-          : null,
+              : Get.arguments != null && prefs!.getString('email') != null
+                  ? AppBar(
+                      title: const Text("UPDATE"),
+                    )
+                  : null,
       backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(40.0),
@@ -197,7 +200,14 @@ class SignUp extends GetView<AuthController> {
                     },
                   ),
                   const SizedBox(
-                    height: 40.0,
+                    height: 10.0,
+                  ),
+                  GetX<AuthController>(builder: (AuthController controller) {
+                    return Text(controller.messageError.value,
+                        style: const TextStyle(color: Colors.red));
+                  }),
+                  const SizedBox(
+                    height: 20.0,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -206,47 +216,52 @@ class SignUp extends GetView<AuthController> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            User user = User(
-                                name: nameController.text,
+                            CustomUser user = CustomUser(
+                                name: nameController.text.toLowerCase(),
                                 nationalNumber: nationalNumberController.text,
                                 dateOfBirth: dateOfBirthController.text,
-                                title: titleController.text,
+                                title: titleController.text.toLowerCase(),
                                 photo: fileUploadController.imagePath!.value,
                                 phone: phoneController.text,
                                 email: emailController.text);
 
                             if (Get.arguments == null) {
-                              int res =
-                                  await userController.insert('users', user);
-                              if (res > 0) {
-                                Get.back();
-                                fileUploadController.imagePath!.value = '';
-                                titleController.text = '';
-                                nameController.text = '';
-                                nameController.text = '';
-                                dateOfBirthController.text = '';
-                                phoneController.text = '';
-                                emailController.text = '';
+                              try {
+                                int res =
+                                    await userController.insert('users', user);
+                                if (res > 0) {
+                                  Get.back();
+                                  fileUploadController.imagePath!.value = '';
+                                  titleController.text = '';
+                                  nameController.text = '';
+                                  nameController.text = '';
+                                  dateOfBirthController.text = '';
+                                  phoneController.text = '';
+                                  emailController.text = '';
 
-                                prefs!.getString('nNumber') == null
-                                    ? Get.snackbar(
-                                        "DONE",
-                                        "Sign Up successfully, you can login now",
-                                        colorText: Colors.white,
-                                        snackPosition: SnackPosition.TOP,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 101, 172, 116),
-                                        icon: const Icon(Icons.done),
-                                      )
-                                    : Get.snackbar(
-                                        "DONE",
-                                        "User Added successfully",
-                                        colorText: Colors.white,
-                                        snackPosition: SnackPosition.TOP,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 101, 172, 116),
-                                        icon: const Icon(Icons.done),
-                                      );
+                                  prefs!.getString('email') == null
+                                      ? Get.snackbar(
+                                          "DONE",
+                                          "Sign Up successfully, you can login now",
+                                          colorText: Colors.white,
+                                          snackPosition: SnackPosition.TOP,
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 101, 172, 116),
+                                          icon: const Icon(Icons.done),
+                                        )
+                                      : Get.snackbar(
+                                          "DONE",
+                                          "User Added successfully",
+                                          colorText: Colors.white,
+                                          snackPosition: SnackPosition.TOP,
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 101, 172, 116),
+                                          icon: const Icon(Icons.done),
+                                        );
+                                }
+                              } catch (e) {
+                                controller.messageError.value =
+                                    'You already have an account, try to login';
                               }
                             } else {
                               await userController.updateUser(
@@ -255,7 +270,7 @@ class SignUp extends GetView<AuthController> {
                             }
                           }
                         },
-                        child: prefs!.getString('nNumber') == null
+                        child: prefs!.getString('email') == null
                             ? const Text(
                                 'SIGN UP',
                                 style: TextStyle(
@@ -282,9 +297,9 @@ class SignUp extends GetView<AuthController> {
                     ],
                   ),
                   const SizedBox(
-                    height: 40.0,
+                    height: 20.0,
                   ),
-                  prefs!.getString('nNumber') == null
+                  prefs!.getString('email') == null
                       ? Row(
                           children: <Widget>[
                             const Text(
@@ -292,6 +307,8 @@ class SignUp extends GetView<AuthController> {
                             ),
                             GestureDetector(
                               onTap: () {
+                                controller.messageError.value = '';
+                                controller.isChecked.value = false;
                                 Get.toNamed('/');
                               },
                               child: const Text(

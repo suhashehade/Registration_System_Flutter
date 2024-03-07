@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/controllers/navigationRailController.dart';
-import 'package:registration_app/controllers/authController.dart';
-import 'package:registration_app/controllers/showPagesController.dart';
+import 'package:registration_app/controllers/navigation_rail_controller.dart';
+import 'package:registration_app/controllers/auth_controller.dart';
+import 'package:registration_app/controllers/show_pages_controller.dart';
 
 class CustomNavigationRail extends GetView<NavigationRailController> {
   const CustomNavigationRail({super.key});

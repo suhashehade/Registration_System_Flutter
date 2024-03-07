@@ -3,14 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/api/pdf_invoice_api.dart';
-import 'package:registration_app/controllers/orderController.dart';
-import 'package:registration_app/controllers/userController.dart';
-import 'package:registration_app/main.dart';
+import 'package:registration_app/controllers/order_controller.dart';
 import 'package:registration_app/models/currency.dart';
 import 'package:registration_app/models/invoice.dart';
-import 'package:registration_app/models/invoiceInfo.dart';
+import 'package:registration_app/models/invoice_info.dart';
 import 'package:registration_app/models/order.dart';
-import 'package:registration_app/models/orderArguments.dart';
+import 'package:registration_app/models/order_arguments.dart';
 import 'package:registration_app/models/user.dart';
 
 class OrderCard extends GetView<OrderController> {
@@ -19,8 +17,6 @@ class OrderCard extends GetView<OrderController> {
   final int index;
   @override
   Widget build(BuildContext context) {
-    UserController userController = Get.put(UserController());
-
     return Card(
       color: const Color.fromARGB(255, 243, 239, 204),
       child: ListTile(
@@ -90,7 +86,7 @@ class OrderCard extends GetView<OrderController> {
                         Get.toNamed('/addOrder',
                             arguments: OrderArgument(
                                 id: controller.orders[index]['orderId'],
-                                user: User(
+                                user: CustomUser(
                                     name: controller.orders[index]['username'],
                                     nationalNumber: '',
                                     dateOfBirth: '',
@@ -124,8 +120,6 @@ class OrderCard extends GetView<OrderController> {
                     IconButton(
                         color: const Color.fromARGB(255, 64, 99, 67),
                         onPressed: () async {
-                          Map user = await userController.getCurrentUser(
-                              prefs!.getString('nNumber').toString());
                           final DateTime date = DateTime.now();
                           final DateTime dueDate =
                               date.add(const Duration(days: 7));
@@ -142,15 +136,15 @@ class OrderCard extends GetView<OrderController> {
                                     ['equalAmount'],
                                 status: controller.orders[index]['state'],
                                 type: controller.orders[index]['type']),
-                            supplier: User(
-                                name: prefs!.getString('name').toString(),
+                            supplier: CustomUser(
+                                name: 'Spinel Technology',
                                 nationalNumber: '',
                                 dateOfBirth: '',
-                                title: user['title'],
+                                title: 'TECH',
                                 photo: '',
-                                phone: user['phone'],
-                                email: user['email']),
-                            customer: User(
+                                phone: '123637845',
+                                email: 'spinel@gmail.com'),
+                            customer: CustomUser(
                                 name: controller.orders[index]['username'],
                                 nationalNumber: controller.orders[index]
                                     ['nationalNumber'],

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:registration_app/models/currencyArguments.dart';
+import 'package:registration_app/models/currency_arguments.dart';
 
-import '../controllers/currenciesController.dart';
+import '../controllers/currencies_controller.dart';
 import '../models/currency.dart';
 
 class CurrenciesList extends GetView<CurrenciesController> {

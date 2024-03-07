@@ -1,17 +1,16 @@
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import "package:pdf/widgets.dart" as pw;
-import 'package:flutter/material.dart' as mt;
 import 'package:printing/printing.dart';
 import 'package:registration_app/api/pdf_api.dart';
-import 'package:registration_app/models/userInvoice.dart';
+import 'package:registration_app/api/pdf_widgets.dart';
+import 'package:registration_app/models/user_invoice.dart';
 
 class UserInvoicePdf {
-  static Future generate(UserInvoice invoice) async {
+  static Future generate(invoice) async {
     final pdf = pw.Document();
-    ByteData bytes = await rootBundle.load('assets/spinel_logo.jpg');
+
+    ByteData bytes = await rootBundle.load('assets/images/spinel_logo.jpg');
     Uint8List logobytes = bytes.buffer.asUint8List();
     double total = 0.0;
     for (var o in invoice.userOrders) {
@@ -30,47 +29,27 @@ class UserInvoicePdf {
     pdf.addPage(pw.MultiPage(
         theme: pw.ThemeData.withFont(
           base: await PdfGoogleFonts.openSansRegular(),
-          bold: await PdfGoogleFonts.openSansBold(),
-          icons: await PdfGoogleFonts.materialIcons(), // this line
+          bold: await PdfGoogleFonts.openSansRegular(),
+          icons: await PdfGoogleFonts.openSansRegular(), // this line
         ),
         pageFormat: PdfPageFormat.a4,
         build: (context) => [
-              Logo(logobytes),
-              Header(invoice),
+              PDFWidgets.Logo(logobytes),
+              PDFWidgets.Header(invoice),
               pw.Divider(),
               Body(invoice, headers, total),
               pw.Divider(),
-              Footer(invoice),
+              PDFWidgets.Footer(invoice),
             ]));
 
     return await PdfApi.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
+  // ignore: non_constant_identifier_names
   static HeaderTable(List header) =>
       pw.TableRow(children: header.map((h) => pw.Text(h)).toList());
 
-  static pw.Widget Logo(logobytes) => pw.Center(
-      child: pw.Image(pw.MemoryImage(logobytes), height: 100.0, width: 100.0));
-
-  static pw.Widget Header(UserInvoice invoice) =>
-      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
-        pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-          pw.Text('Invoice to '),
-          pw.Text(invoice.customer.name,
-              style: const pw.TextStyle(fontSize: 16.0)),
-          pw.Text(invoice.customer.title,
-              style: const pw.TextStyle(fontSize: 14.0)),
-        ]),
-        pw.Column(children: [
-          pw.Text('INVOICE',
-              style:
-                  pw.TextStyle(fontSize: 30.0, fontWeight: pw.FontWeight.bold)),
-          pw.Text('Invoice NO.: ${invoice.invoiceInfo.number}'),
-          pw.Text(
-              'Invoice Date: ${DateFormat.yMMMd().format(DateTime(invoice.invoiceInfo.date.year, invoice.invoiceInfo.date.month, invoice.invoiceInfo.date.day))}')
-        ])
-      ]);
-
+  // ignore: non_constant_identifier_names
   static pw.Widget Body(UserInvoice invoice, List header, double total) =>
       pw.Column(children: [
         pw.Table(
@@ -129,25 +108,4 @@ class UserInvoicePdf {
               ]),
         )
       ]);
-
-  static pw.Widget Footer(UserInvoice invoice) => pw.Container(
-        padding: const pw.EdgeInsets.all(20.0),
-        color: PdfColor.fromHex('#406343'),
-        child: pw.Column(children: [
-          pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-              children: [
-                pw.Row(children: [
-                  pw.Icon(pw.IconData(mt.Icons.phone.codePoint)),
-                  pw.Text('Phone: ${invoice.supplier.phone}',
-                      style: pw.TextStyle(color: PdfColor.fromHex('#f3efcc'))),
-                ]),
-                pw.Row(children: [
-                  pw.Icon(pw.IconData(mt.Icons.email.codePoint)),
-                  pw.Text('Email: ${invoice.supplier.email}',
-                      style: pw.TextStyle(color: PdfColor.fromHex('#f3efcc'))),
-                ])
-              ])
-        ]),
-      );
 }

@@ -26,12 +26,12 @@ class DB {
     await db.execute('''CREATE TABLE 'users' (
                 "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 "name" TEXT NOT NULL,
-                "national_number" TEXT NOT NULL UNIQUE,
+                "national_number" TEXT,
                 "date_of_birth" DATE,
                 "title" TEXT, 
                 "photo" TEXT, 
                 "phone" TEXT,
-                "email" TEXT
+                "email" TEXT UNIQUE
                )
                 
     ''');
@@ -58,6 +58,7 @@ class DB {
      )
 ''');
 
+    // ignore: avoid_print
     print('OnCreate ========================================');
   }
 
@@ -65,6 +66,7 @@ class DB {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath, 'registration_db');
     await deleteDatabase(path);
+    // ignore: avoid_print
     print('Database Deleted');
   }
 
@@ -164,6 +166,7 @@ class DB {
      )
 ''');
 
+    // ignore: avoid_print
     print("created the new table order");
   }
 }
