@@ -110,6 +110,7 @@ class Login extends GetView<AuthController> {
                               if (res.isNotEmpty) {
                                 Get.offNamed('/archive');
                                 controller.messageError.value = '';
+                                await prefs!.setBool('isLogin', true);
                               } else {
                                 controller.messageError.value =
                                     "It seems that you don't have an account, you have to register";
@@ -171,8 +172,9 @@ class Login extends GetView<AuthController> {
                           height: 10.0,
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            controller.signInWithGoogle();
+                          onPressed: () async {
+                            await controller.signInWithGoogle();
+                            Get.toNamed('/archive');
                           },
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,8 +192,9 @@ class Login extends GetView<AuthController> {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: () {
-                            controller.signInWithFacebook();
+                          onPressed: () async {
+                            await controller.signInWithFacebook();
+                            Get.toNamed('/archive');
                           },
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

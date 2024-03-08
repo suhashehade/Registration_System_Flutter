@@ -37,17 +37,15 @@ class SignUp extends GetView<AuthController> {
       emailController.text = Get.arguments.user.email;
     }
     return Scaffold(
-      appBar: Get.arguments == null && prefs!.getString('email') == null
-          ? null
-          : Get.arguments == null && prefs!.getString('email') != null
+      appBar: prefs!.getBool('isLogin') != null
+          ? Get.arguments == null
               ? AppBar(
                   title: const Text("ADD"),
                 )
-              : Get.arguments != null && prefs!.getString('email') != null
-                  ? AppBar(
-                      title: const Text("UPDATE"),
-                    )
-                  : null,
+              : AppBar(
+                  title: const Text("UPDATE"),
+                )
+          : null,
       backgroundColor: const Color.fromARGB(255, 243, 239, 204),
       body: Padding(
         padding: const EdgeInsets.all(40.0),
@@ -57,44 +55,42 @@ class SignUp extends GetView<AuthController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Get.arguments == null
-                      ? const Text(
+                  prefs!.getBool('isLogin') != null
+                      ? Get.arguments == null
+                          ? const Text(
+                              'ADD',
+                              style: TextStyle(
+                                fontSize: 30.0,
+                              ),
+                            )
+                          : const Text(
+                              'UPDATE',
+                              style: TextStyle(
+                                fontSize: 30.0,
+                              ),
+                            )
+                      : const Text(
                           'SIGN UP',
                           style: TextStyle(
                             fontSize: 30.0,
                           ),
-                        )
-                      : const Text(
-                          'UPDATE',
-                          style: TextStyle(
-                            fontSize: 30.0,
-                          ),
                         ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  GetX<FileUploadController>(
-                      builder: (FileUploadController controller) {
-                    return controller.imagePath!.value == ''
-                        ? const Text('no picked image')
-                        : GetX<FileUploadController>(
-                            builder: (FileUploadController controller) {
-                            return SizedBox(
-                              height: 50.0,
-                              width: 50.0,
-                              child:
-                                  Image.file(File(controller.imagePath!.value)),
-                            );
-                          });
-                  }),
+                  fileUploadController.imagePath!.value == ''
+                      ? const Text('no picked image')
+                      : GetX<FileUploadController>(
+                          builder: (FileUploadController controller) {
+                          return SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                            child:
+                                Image.file(File(controller.imagePath!.value)),
+                          );
+                        }),
                   MaterialButton(
                     onPressed: () {
                       fileUploadController.uplaodImage();
                     },
                     child: const Text('upload image'),
-                  ),
-                  const SizedBox(
-                    height: 30.0,
                   ),
                   TextFormField(
                     controller: nameController,
@@ -206,7 +202,7 @@ class SignUp extends GetView<AuthController> {
                         style: const TextStyle(color: Colors.red));
                   }),
                   const SizedBox(
-                    height: 20.0,
+                    height: 10.0,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -238,7 +234,7 @@ class SignUp extends GetView<AuthController> {
                                   phoneController.text = '';
                                   emailController.text = '';
 
-                                  prefs!.getString('email') == null
+                                  prefs!.getBool('isLogin') == null
                                       ? Get.snackbar(
                                           "DONE",
                                           "Sign Up successfully, you can login now",
@@ -269,7 +265,7 @@ class SignUp extends GetView<AuthController> {
                             }
                           }
                         },
-                        child: prefs!.getString('email') == null
+                        child: prefs!.getBool('isLogin') == null
                             ? const Text(
                                 'SIGN UP',
                                 style: TextStyle(
@@ -296,9 +292,9 @@ class SignUp extends GetView<AuthController> {
                     ],
                   ),
                   const SizedBox(
-                    height: 20.0,
+                    height: 10.0,
                   ),
-                  prefs!.getString('email') == null
+                  prefs!.getBool('isLogin') == null
                       ? Row(
                           children: <Widget>[
                             const Text(

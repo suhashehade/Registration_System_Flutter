@@ -23,6 +23,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   prefs = await SharedPreferences.getInstance();
   db = DB();
   Get.put(SideBarController());

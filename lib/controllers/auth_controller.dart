@@ -14,7 +14,8 @@ class AuthController extends GetxController {
   RxString messageError = ''.obs;
   Future<void> signInWithGoogle() async {
     messageError.value = '';
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
@@ -22,9 +23,10 @@ class AuthController extends GetxController {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
+    await googleUser?.clearAuthCache();
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
+    await prefs!.setBool('isLogin', true);
 
     final http.Response responseData =
         await http.get(Uri.parse(userCredential.user!.photoURL.toString()));
@@ -50,16 +52,13 @@ class AuthController extends GetxController {
       if (resLogin.isEmpty) {
         int res = await signUp('users', user);
         if (res > 0) {
-          prefs!.setString('email', user.email);
           messageError.value = '';
-          Get.toNamed('/archive');
         }
       } else {
-        handleSignOutGoogle();
+        await handleSignOutGoogle();
       }
     } catch (e) {
-      messageError.value = 'You already have an account';
-      handleSignOutGoogle();
+      await handleSignOutGoogle();
     }
   }
 
@@ -69,7 +68,7 @@ class AuthController extends GetxController {
         FacebookAuthProvider.credential(loginResult.accessToken!.token);
     UserCredential userCredential = await FirebaseAuth.instance
         .signInWithCredential(facebookAuthCredential);
-
+    await prefs!.setBool('isLogin', true);
     final http.Response responseData =
         await http.get(Uri.parse(userCredential.user!.photoURL.toString()));
     var uint8list = responseData.bodyBytes;
@@ -93,21 +92,20 @@ class AuthController extends GetxController {
       if (resLogin.isEmpty) {
         int res = await signUp('users', user);
         if (res > 0) {
-          prefs!.setString('email', user.email);
           messageError.value = '';
-          Get.toNamed('/archive');
         } else {
-          handleSignOutFacebook();
+          await handleSignOutFacebook();
         }
       }
     } catch (e) {
-      messageError.value = 'You already have an account';
-      handleSignOutFacebook();
+      await handleSignOutFacebook();
     }
   }
 
-  Future<void> handleSignOutGoogle() => GoogleSignIn().disconnect();
-  Future<void> handleSignOutFacebook() => FacebookAuth.instance.logOut();
+  Future<void> handleSignOutGoogle() async =>
+      await FirebaseAuth.instance.signOut();
+  Future<void> handleSignOutFacebook() async =>
+      await FacebookAuth.instance.logOut();
 
   toggleCheck(value) {
     isChecked.value = value!;
@@ -134,9 +132,12 @@ class AuthController extends GetxController {
     return res;
   }
 
-  logout() {
-    handleSignOutGoogle();
-    handleSignOutFacebook();
+  logout() async {
+    if (await GoogleSignIn().isSignedIn()) {
+      await handleSignOutGoogle();
+      await handleSignOutFacebook();
+      await GoogleSignIn().disconnect();
+    }
     prefs!.clear();
     isChecked.value = false;
   }
