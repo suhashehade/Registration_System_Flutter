@@ -107,7 +107,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> handleSignOutGoogle() => GoogleSignIn().disconnect();
-  Future<void> handleSignOutFacebook() => GoogleSignIn().disconnect();
+  Future<void> handleSignOutFacebook() => FacebookAuth.instance.logOut();
 
   toggleCheck(value) {
     isChecked.value = value!;
