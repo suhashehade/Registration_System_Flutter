@@ -132,13 +132,12 @@ class AuthController extends GetxController {
     return res;
   }
 
-  logout() async {
-    if (await GoogleSignIn().isSignedIn()) {
-      await handleSignOutGoogle();
-      await handleSignOutFacebook();
-      await GoogleSignIn().disconnect();
-    }
-    prefs!.clear();
+  logout() {
+    handleSignOutGoogle();
+    handleSignOutFacebook();
+    GoogleSignIn().disconnect();
+    prefs!.remove('email');
+    prefs!.remove('isLogin');
     isChecked.value = false;
   }
 }

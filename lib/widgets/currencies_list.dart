@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:registration_app/models/currency_arguments.dart';
-
 import '../controllers/currencies_controller.dart';
 import '../models/currency.dart';
 

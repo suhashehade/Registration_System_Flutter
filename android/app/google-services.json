@@ -31,8 +31,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "584512198614-pebv39vq591a8p9o8ri2d894kfdruc2j.apps.googleusercontent.com",
+              "client_id": "584512198614-ljsiqa26mnt1kgev29jr1oh3hrr0njtc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "584512198614-q99tquhaef3eup950gq72qqi11puat2j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.registrationApp"
+              }
             }
           ]
         }

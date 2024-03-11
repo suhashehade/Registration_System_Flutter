@@ -10,6 +10,7 @@ class CurrenciesPage extends GetView<CurrenciesController> {
   @override
   Widget build(BuildContext context) {
     Get.put(CurrenciesController());
+
     return Archive(
       title: const Text('Currencies'),
       body: Currencies(),

@@ -7,6 +7,7 @@ import 'package:registration_app/widgets/currencies_list.dart';
 class Currencies extends GetView<CurrenciesController> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController keyWordConroller = TextEditingController();
+
   Currencies({super.key});
 
   @override

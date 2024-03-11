@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:registration_app/api/firebase_api.dart';
 import 'package:registration_app/controllers/currencies_controller.dart';
 import 'package:registration_app/models/currency.dart';
 
@@ -14,7 +15,6 @@ class AddCurrency extends GetView<CurrenciesController> {
   @override
   Widget build(BuildContext context) {
     CurrenciesController currenciesController = Get.find();
-
     if (Get.arguments != null) {
       nameController.text = Get.arguments.currency.name;
       symbolController.text = Get.arguments.currency.symbol;
@@ -112,6 +112,11 @@ class AddCurrency extends GetView<CurrenciesController> {
                           if (Get.arguments == null) {
                             await currenciesController.insert(
                                 'currencies', currency);
+                            await FirebaseApi().sendMessage(
+                                "Done",
+                                "The currency ${currency.name} is added successfully!",
+                                "9999${DateTime.now}");
+                            await FirebaseApi().initNotifications();
                           } else {
                             await controller.updateCurrency(
                                 'currencies', currency, Get.arguments.id);

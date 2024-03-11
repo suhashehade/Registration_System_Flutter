@@ -6,7 +6,7 @@ import 'package:registration_app/main.dart';
 class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
-    if (prefs!.getString('name') != null && prefs!.getString('email') != null) {
+    if (prefs!.getString('email') != null) {
       return const RouteSettings(name: "/archive");
     }
     return null;
