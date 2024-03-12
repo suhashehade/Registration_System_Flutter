@@ -10,6 +10,7 @@ import 'package:registration_app/pages/add_order.dart';
 import 'package:registration_app/pages/archive_page.dart';
 import 'package:registration_app/pages/currencies_page.dart';
 import 'package:registration_app/pages/notification_page.dart';
+import 'package:registration_app/pages/notifications_page.dart';
 import 'package:registration_app/pages/orders_page.dart';
 import 'package:registration_app/pages/pdf_page.dart';
 import 'package:registration_app/pages/sign_up.dart';
@@ -50,6 +51,7 @@ void main() async {
       GetPage(name: '/signUp', page: () => SignUp()),
       GetPage(name: '/pdfPage', page: () => PdfView()),
       GetPage(name: '/notificationPage', page: () => const NotificationPage()),
+      GetPage(name: '/notifications', page: () => const NotificationsPage()),
     ],
   ));
 }

@@ -9,6 +9,8 @@
         android:name="${applicationName}"
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:fullBackupOnly="false"
     >
 
         <activity

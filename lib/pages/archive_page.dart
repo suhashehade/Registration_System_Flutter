@@ -21,14 +21,19 @@ class ArchivePage extends GetView<ShowPagesController> {
           actions: [
             Container(
               padding: const EdgeInsets.all(15.0),
-              child: Badge(
-                child: Icon(Icons.notifications),
-                label: Obx(
-                  () => Text(
-                    '${messageNotificationController!.count.value}',
+              child: InkWell(
+                onTap: () {
+                  Get.toNamed('/notifications');
+                },
+                child: Badge(
+                  child: Icon(Icons.notifications),
+                  label: Obx(
+                    () => Text(
+                      '${messageNotificationController!.count.value}',
+                    ),
                   ),
+                  backgroundColor: Colors.amber,
                 ),
-                backgroundColor: Colors.amber,
               ),
             )
           ],
