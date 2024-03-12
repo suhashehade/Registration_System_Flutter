@@ -184,6 +184,7 @@ class FirebaseApi {
       NotificationMessage notificationMessage = NotificationMessage(
           title: title, body: message, payload: body['data']);
       messageNotificationController!.updateMessage(notificationMessage);
+      messageNotificationController!.addMessage();
       messageNotificationController!.increaseCount();
     } else {
       print("fail: ${res.reasonPhrase}");

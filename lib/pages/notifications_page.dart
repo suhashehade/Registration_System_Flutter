@@ -21,7 +21,7 @@ class NotificationsPage extends GetView<MessageNotificationController> {
               builder: (MessageNotificationController controller) {
             return ListView(
               children: controller.notifications
-                  .map((n) => Text(n.body.value))
+                  .map((n) => Text(n.body.value.toString()))
                   .toList(),
             );
           })),
