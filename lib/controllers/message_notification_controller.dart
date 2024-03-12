@@ -12,6 +12,7 @@ class MessageNotificationController extends GetxController {
     title.value = message.title;
     body.value = message.body;
     payload = message.payload;
+    notifications.add(message);
   }
 
   addMessage() {
